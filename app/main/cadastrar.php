@@ -15,7 +15,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </head>
 <body style="background-image: url('../Util/background.png')">
-<div class="container">
+<div class="container" style="background-color: white; border-radius: 15px">
 
     <form class="form2-signup" id="form" name="form" method="POST" action="../login2.php">
         <h2 class="form-signin-heading" style="text-align: center;">E-LAWYER</h2>
@@ -27,21 +27,21 @@
             </div>
 
             <div class="form-group col-md-4">
-                <label for="inputCPF">CPF</label>
-                <input type="text" class="form-control" id="inputCPF" name="inputCPF"
-                       placeholder="000.000.000-00">
+                <label for="inputC">CPF</label>
+                <input type="text" class="form-control"  id="inputCPF" name="inputCPF" placeholder="" maxlength="18" onkeypress='mascaraMutuario(this,cpfCnpj)'
+                       onblur='clearTimeout()' required data-error="Informe seu CPF">
             </div>
 
             <div class="form-group col-md-6">
                 <label for="inputEmail4">Email</label>
                 <input type="email" class="form-control" id="inputEmail4" name="inputEmail4"
-                       placeholder="Email address required">
+                       placeholder="exemplo@exemplo.com.br">
             </div>
 
             <div class="form-group col-md-6">
                 <label for="inputPassword4">Password</label>
                 <input type="password" class="form-control" id="inputPassword4" name="inputPassword4"
-                       placeholder="Senha" required>
+                       placeholder="********" required>
             </div>
 
         </div>
@@ -53,7 +53,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputCity">Cidade</label>
-                <input type="text" class="form-control" id="inputCity" name="inputCity" required>
+                <input type="text" class="form-control" id="inputCity" name="inputCity" required placeholder="Cidade" />
             </div>
             <div class="form-group col-md-4">
                 <label for="inputState">Estado</label>
@@ -66,8 +66,9 @@
             </div>
             <div class="form-group col-md-2">
                 <label for="inputZip">CEP</label>
-                <input type="text" class="form-control" id="inputZip" name="inputZip" placeholder="00000-000"
-                       maxlength="8" required>
+
+                <input type="text" class="form-control" name="cep" onKeyPress="MascaraCep(this);"
+                       maxlength="10" onBlur="ValidaCep(this)">
             </div>
         </div>
         <div class="form-row">
@@ -97,5 +98,6 @@
 </div>
 
 <script src="../bootstrap/assets/js/ie10-viewport-bug-workaround.js"></script>
+<script src="../Util/js/jsFile.js"> </script>
 </body>
 </html>
