@@ -17,7 +17,7 @@
 <body style="background-image: url('../Util/background.png')">
 <div class="container" style="background-color: white; border-radius: 15px">
 
-    <form class="form2-signup" id="form" name="form" method="POST" action="index.php?novo_usuario=true">
+    <form class="form2-signup" id="form" name="form" method="POST" action="login.php?novo_usuario=true">
         <h2 class="form-signin-heading" style="text-align: center;">E-LAWYER</h2>
         <div class="form-row">
             <div class="form-group col-md-8">
