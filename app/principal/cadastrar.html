@@ -25,7 +25,7 @@
     <div class="card card-register mx-auto mt-5">
       <div class="card-header">Cadastrar uma nova conta</div>
       <div class="card-body">
-        <form>
+        <form id="formCadastro" name="formCadastro" onsubmit="return validarSenha(this);" action="#" method="POST">
           <div class="form-group">
             <div class="form-row">
               <div class="col-md-6">
@@ -69,24 +69,24 @@
             <div class="form-row">
               <div class="col-md-6">
                 <div class="form-label-group">
-                  <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="required">
+                  <input type="password" id="inputPassword" name="senha1" class="form-control" placeholder="Password" required="required">
                   <label for="inputPassword">Senha</label>
                 </div>
               </div>
               <div class="col-md-6">
                 <div class="form-label-group">
-                  <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm password" required="required">
+                  <input type="password" id="confirmPassword" name="senha2" class="form-control" placeholder="Confirm password" required="required">
                   <label for="confirmPassword">Confirmar senha</label>
                 </div>
               </div>
             </div>
           </div>
-          <a class="btn btn-primary btn-block" href="login.html">Cadastrar</a>
+          <button type="submit" class="btn btn-primary btn-block">Cadastrar</button>
+            <div class="text-center">
+                <a class="d-block small mt-3" href="login.html">Tela de Login</a>
+                <a class="d-block small" href="esqueci_senha.html">Esqueceu sua senha?</a>
+            </div>
         </form>
-        <div class="text-center">
-          <a class="d-block small mt-3" href="login.html">Tela de Login</a>
-          <a class="d-block small" href="esqueci_senha.html">Esqueceu sua senha?</a>
-        </div>
       </div>
     </div>
   </div>
@@ -99,6 +99,18 @@
   <script src="../Util/principal/vendor/jquery-easing/jquery.easing.min.js"></script>
 
   <script src="../Util/js/jsFile.js"> </script>
+
+  <script>
+      function validarSenha(form){
+          senha = document.formCadastro.senha1.value;
+          senhaRepetida = document.formCadastro.senha2.value;
+          if (senha != senhaRepetida){
+              alert("Repita a senha corretamente");
+              document.formulario.senha2.focus();
+              return false;
+          }
+      }
+  </script>
 
 </body>
 
