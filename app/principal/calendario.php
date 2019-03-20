@@ -1,3 +1,12 @@
+<?php
+include_once "../connections/conections.php";
+include_once "../connections/model.php";
+
+$model = new Model();
+
+$result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
+
+?>
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -11,6 +20,13 @@
 
   <title>E-LAW - Seu caso no seu controle</title>
 
+    <link href='../Util/principal/css_calendar/fullcalendar.min.css' rel='stylesheet' />
+    <link href='../Util/principal/css_calendar/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+    <script src='../Util/principal/js_calendar/moment.min.js'></script>
+    <script src='../Util/principal/js_calendar/jquery.min.js'></script>
+    <script src='../Util/principal/lib_calendar/fullcalendar.min.js'></script>
+    <script src='../Util/principal/locale/pt-br.js'></script>
+
   <!-- Custom fonts for this template-->
   <link href="../Util/principal/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
@@ -20,7 +36,58 @@
   <!-- Custom styles for this template-->
   <link href="../Util/principal/css/sb-admin.css" rel="stylesheet">
 
-  <link href="../Util/principal/css/bootstrap-year-calendar.css" rel="stylesheet">
+  <script>
+
+    $(document).ready(function() {
+
+      $('#calendar').fullCalendar({
+
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay'
+        },
+        defaultDate: Date(),
+        navLinks: true, // can click day/week names to navigate views
+        editable: false,
+        eventLimit: true, // allow "more" link when too many events
+      eventClick: function(event) {
+
+          $('#detalhes #id').text(event.id);
+          $('#detalhes #title').text(event.title);
+          $('#detalhes #start').text(event.start.format('DD/MM/YYYY HH:MM'));
+          $('#detalhes #end').text(event.end.format('DD/MM/YYYY HH:MM'));
+          $('#detalhes #description').text(event.description);
+          $('#detalhes').modal('show');
+            return false;
+      },
+        events: [
+            <?php
+                while ($linha_agenda = mysqli_fetch_array($result_agenda)){
+               ?>
+                  {
+                    id: '<?php echo $linha_agenda['idagenda'];?>',
+                      title: '<?php echo $linha_agenda['tarefa'];?>',
+                      start: '<?php echo $linha_agenda['data_inicio'];?>',
+                      end: '<?php echo $linha_agenda['data_fim'];?>',
+                      color: '<?php echo $linha_agenda['nivel'];?>',
+                      description: '<?php echo $linha_agenda['descricao'];?>',
+                  },
+                <?php
+                }
+                ?>
+        ]
+        });
+    });
+
+  </script>
+    <style>
+        #calendar {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+    </style>
+
 
 </head>
 
@@ -84,7 +151,7 @@
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <!-- <h6 class="dropdown-header">Other Pages:</h6> -->
           <a class="dropdown-item" href="mensagens.html">Mensagens</a>
-          <a class="dropdown-item" href="calendario.html">Calendário</a>
+          <a class="dropdown-item" href="calendario.php">Calendário</a>
           <a class="dropdown-item" href="casos_juridicos.html">Casos Jurídicos</a>
           <a class="dropdown-item" href="anotacoes.html">Anotações</a>
         </div>
@@ -116,11 +183,8 @@
           <!-- Page Content -->
           <h1>Agenda</h1>
           <hr>
-          <!-- <div data-provide="calendar"></div>-->
-          <iframe src="https://calendar.google.com/calendar/b/2/embed?height=600&amp;wkst=1&amp;bgcolor=%23FFFFFF&amp;src=contatoelaw%40gmail.com&amp;color=%231B887A&amp;ctz=America%2FSao_Paulo" style="border-width:0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+          <div id='calendar'></div>
 
-
-          <a target="_blank" href="https://calendar.google.com/event?action=TEMPLATE&amp;tmeid=N3I5Nms0Mm4xb2R1MWNlbDJxbmk5MDZydG4gY29udGF0b2VsYXdAbQ&amp;tmsrc=contatoelaw%40gmail.com"><img border="0" src="https://www.google.com/calendar/images/ext/gc_button1_pt-BR.gif"></a>
         </div>
         <!-- /.container-fluid -->
 
@@ -163,8 +227,49 @@
     </div>
   </div>
 
+  <div class="modal fade" id="detalhes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Dados do Evento</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form>
+                      <div class="form-group row">
+                          <label for="titleTarefa" class="col-sm-2 col-form-label" style="font-weight: bold;">Tarefa:</label>
+                          <div class="col-sm-10">
+                              <dd id="title" class="form-group" style="margin-top: 7px;"></dd>
+                          </div>
+                          <label for="titleDescrition" class="col-sm-2 col-form-label" style="font-weight: bold;">Descrição:</label>
+                          <div class="col-sm-10">
+                              <dd id="description" class="form-group" style="margin-top: 7px;"></dd>
+                          </div>
+                          <label for="titleDescrition" class="col-sm-2 col-form-label" style="font-weight: bold;">Início:</label>
+                          <div class="col-sm-10">
+                              <dd id="start" class="form-group" style="margin-top: 7px;"></dd>
+                          </div>
+                          <label for="titleDescrition" class="col-sm-2 col-form-label" style="font-weight: bold;">Fim:</label>
+                          <div class="col-sm-10">
+                              <dd id="end" class="form-group" style="margin-top: 7px;"></dd>
+                          </div>
+                      </div>
+                  </form>
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-default">
+                      <img src="../Util/glyph-iconset-master/svg/si-glyph-edit.svg" style="width: 25px;"/> Editar
+                  </button>
+              </div>
+          </div>
+      </div>
+  </div>
+
   <!-- Bootstrap core JavaScript-->
-  <script src="../Util/principal/vendor/jquery/jquery.min.js"></script>
+  <!-- JS comentado devido a importação anterior de outro js para o calendario -->
+  <!-- <script src="../Util/principal/vendor/jquery/jquery.min.js"></script> -->
   <script src="../Util/principal/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Core plugin JavaScript-->
@@ -172,9 +277,6 @@
 
   <!-- Custom scripts for all pages-->
   <script src="../Util/principal/js/sb-admin.min.js"></script>
-
-
-  <script src="../Util/principal/js/bootstrap-year-calendar.js"></script>
 
 </body>
 
