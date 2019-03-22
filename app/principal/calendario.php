@@ -181,9 +181,19 @@ $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
           </ol>
 
           <!-- Page Content -->
-          <h1>Agenda</h1>
+           <h1 style="display: inline-block">Agenda</h1>
+           <button class="btn btn-outline-info" style="float: right;" onclick="editaTarefas('agenda', 'detalheAgenda')">
+               <img src="../Util/glyph-iconset-master/svg/si-glyph-gear-1.svg" style="width: 25px;"/> Editar
+           </button>
+
           <hr>
-          <div id='calendar'></div>
+            <div id="agenda">
+                <div id='calendar'></div>
+            </div>
+            <div id="detalheAgenda">
+
+            </div>
+
 
         </div>
         <!-- /.container-fluid -->
@@ -247,21 +257,17 @@ $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
                           <div class="col-sm-10">
                               <dd id="description" class="form-group" style="margin-top: 7px;"></dd>
                           </div>
-                          <label for="titleDescrition" class="col-sm-2 col-form-label" style="font-weight: bold;">Início:</label>
+                          <label for="dateInicio" class="col-sm-2 col-form-label" style="font-weight: bold;">Início:</label>
                           <div class="col-sm-10">
                               <dd id="start" class="form-group" style="margin-top: 7px;"></dd>
                           </div>
-                          <label for="titleDescrition" class="col-sm-2 col-form-label" style="font-weight: bold;">Fim:</label>
+                          <label for="dateFim" class="col-sm-2 col-form-label" style="font-weight: bold;">Fim:</label>
                           <div class="col-sm-10">
                               <dd id="end" class="form-group" style="margin-top: 7px;"></dd>
                           </div>
+                          <dd id="id" style="display: none;"></dd>
                       </div>
                   </form>
-              </div>
-              <div class="modal-footer">
-                  <button class="btn btn-default">
-                      <img src="../Util/glyph-iconset-master/svg/si-glyph-edit.svg" style="width: 25px;"/> Editar
-                  </button>
               </div>
           </div>
       </div>
