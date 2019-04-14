@@ -1,10 +1,25 @@
 <?php
-include_once "../connections/conections.php";
-include_once "../connections/model.php";
 
-$model = new Model();
+    include_once "../connections/conections.php";
+    include_once "../connections/model.php";
 
-$result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
+    $model = new Model();
+
+    $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
+
+    if(isset($_GET['new']) && $_GET['new'] == true){
+
+        $nomeNovaTarefa = $_POST['nomeNovaTarefa'];
+        $dataInicioNovaTarefa = $_POST['dataInicioNovaTarefa'];
+        $dataFimNovaTarefa = $_POST['dataFimNovaTarefa'];
+        $descricaoNovaTarefa = $_POST['descricaoNovaTarefa'];
+        $nivel = $_POST['colorNovaTarefa'];
+
+        $result_nova_agenda = $model->adiciona_novos_compromissos("10701027681", $nomeNovaTarefa, $dataInicioNovaTarefa,
+            $dataFimNovaTarefa, $nivel, $descricaoNovaTarefa, $con);
+
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=calendario.php'>";
+    }
 
 ?>
 <!DOCTYPE html>
@@ -48,15 +63,15 @@ $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
           right: 'month,agendaWeek,agendaDay'
         },
         defaultDate: Date(),
-        navLinks: true, // can click day/week names to navigate views
+        navLinks: true,
         editable: false,
-        eventLimit: true, // allow "more" link when too many events
+        eventLimit: true,
       eventClick: function(event) {
 
           $('#detalhes #id').text(event.id);
           $('#detalhes #title').text(event.title);
-          $('#detalhes #start').text(event.start.format('DD/MM/YYYY HH:MM'));
-          $('#detalhes #end').text(event.end.format('DD/MM/YYYY HH:MM'));
+          $('#detalhes #start').text(event.start.format('DD/MM/YYYY HH:mm'));
+          $('#detalhes #end').text(event.end.format('DD/MM/YYYY HH:mm'));
           $('#detalhes #description').text(event.description);
           $('#detalhes').modal('show');
             return false;
@@ -67,11 +82,11 @@ $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
                ?>
                   {
                     id: '<?php echo $linha_agenda['idagenda'];?>',
-                      title: '<?php echo $linha_agenda['tarefa'];?>',
-                      start: '<?php echo $linha_agenda['data_inicio'];?>',
-                      end: '<?php echo $linha_agenda['data_fim'];?>',
-                      color: '<?php echo $linha_agenda['nivel'];?>',
-                      description: '<?php echo $linha_agenda['descricao'];?>',
+                    title: '<?php echo $linha_agenda['tarefa'];?>',
+                    start: '<?php echo $linha_agenda['data_inicio'];?>',
+                    end: '<?php echo $linha_agenda['data_fim'];?>',
+                    color: '<?php echo $linha_agenda['nivel'];?>',
+                    description: '<?php echo $linha_agenda['descricao'];?>',
                   },
                 <?php
                 }
@@ -80,10 +95,21 @@ $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
         });
     });
 
+    function editaTarefas(componente_1, componente_2){
+        if(document.getElementById(componente_1).style.display== "none"){
+            document.getElementById(componente_1).style.display = "block";
+            document.getElementById(componente_2).style.display = "none";
+        }
+        else {
+            document.getElementById(componente_1).style.display = "none";
+            document.getElementById(componente_2).style.display = "block";
+        }
+    }
+
   </script>
     <style>
         #calendar {
-            max-width: 900px;
+            max-width: 1500px;
             margin: 0 auto;
         }
     </style>
@@ -137,13 +163,13 @@ $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="index.html">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Painel de Controle</span>
         </a>
       </li>
-      <li class="nav-item dropdown">
+      <li class="nav-item dropdown active">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-fw fa-folder"></i>
           <span>Páginas</span>
@@ -151,7 +177,7 @@ $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <!-- <h6 class="dropdown-header">Other Pages:</h6> -->
           <a class="dropdown-item" href="mensagens.html">Mensagens</a>
-          <a class="dropdown-item" href="calendario.php">Calendário</a>
+          <a class="dropdown-item active" href="calendario.php">Calendário</a>
           <a class="dropdown-item" href="casos_juridicos.html">Casos Jurídicos</a>
           <a class="dropdown-item" href="anotacoes.html">Anotações</a>
         </div>
@@ -182,15 +208,18 @@ $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
 
           <!-- Page Content -->
            <h1 style="display: inline-block">Agenda</h1>
-           <button class="btn btn-outline-info" style="float: right;" onclick="editaTarefas('agenda', 'detalheAgenda')">
-               <img src="../Util/glyph-iconset-master/svg/si-glyph-gear-1.svg" style="width: 25px;"/> Editar
+           <button class="btn btn-outline-info" style="float: right;margin-left: 5px;" data-toggle="modal" data-target="#adicionar">
+               Adicionar
            </button>
+            <button class="btn btn-outline-warning" style="float: right;" onclick="editaTarefas('agenda', 'detalheAgenda')">
+                Editar
+            </button>
 
           <hr>
             <div id="agenda">
                 <div id='calendar'></div>
             </div>
-            <div id="detalheAgenda">
+            <div id="alteraAgenda">
 
             </div>
 
@@ -202,7 +231,7 @@ $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
         <footer class="sticky-footer">
           <div class="container my-auto">
             <div class="copyright text-center my-auto">
-              <span>Copyright © Your Website 2019</span>
+              <span>Copyright © E-LAW 2019</span>
             </div>
           </div>
         </footer>
@@ -266,6 +295,47 @@ $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
                               <dd id="end" class="form-group" style="margin-top: 7px;"></dd>
                           </div>
                           <dd id="id" style="display: none;"></dd>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+  <div class="modal fade" id="adicionar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Dados do Evento</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form role="form" id="form-cadastro" action="?new=true" method="POST">
+                      <div class="form-group">
+                          <label for="tituloTarefa">Tarefa</label>
+                          <input type="text" class="form-control" id="nomeTarefa" name="nomeNovaTarefa">
+                      </div>
+                      <div class="form-group">
+                          <label for="dataInicio" class="col-form-label">Data Início</label>
+                          <input class="form-control" type="datetime-local" id="dataInicioTarefa" name="dataInicioNovaTarefa">
+                      </div>
+                      <div class="form-group">
+                          <label for="dataFim" class="col-form-label">Data Fim</label>
+                          <input class="form-control" type="datetime-local" id="dataFimTarefa" name="dataFimNovaTarefa">
+                      </div>
+                      <div class="form-group">
+                          <label for="nivel" class="col-form-label">Cor</label>
+                          <input class="form-control" type="color" id="colorNovaTarefa" name="colorNovaTarefa" value="#87CEFA">
+                      </div>
+                      <div class="form-group">
+                          <label for="descricao">Descrição</label>
+                          <textarea type="text" class="form-control" id="descricaoTarefa" name="descricaoNovaTarefa"></textarea>
+                      </div>
+                      <div class="form-group">
+                          <button type="submit" class="btn btn-success">Cadastrar</button>
                       </div>
                   </form>
               </div>
