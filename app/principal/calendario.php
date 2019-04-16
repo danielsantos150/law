@@ -6,6 +6,7 @@
     $model = new Model();
 
     $result_agenda = $model->busca_compromissos_agenda("10701027681", $con);
+    $dados_edicao = $model->busca_compromissos_agenda("10701027681", $con);
 
     if(isset($_GET['new']) && $_GET['new'] == true){
 
@@ -19,6 +20,10 @@
             $dataFimNovaTarefa, $nivel, $descricaoNovaTarefa, $con);
 
         echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=calendario.php'>";
+    }
+
+    if(isset($_GET["edit"])  && $_GET['edit'] == true){
+        var_dump($_POST);exit;
     }
 
 ?>
@@ -54,6 +59,10 @@
   <script>
 
     $(document).ready(function() {
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
 
       $('#calendar').fullCalendar({
 
@@ -96,7 +105,7 @@
     });
 
     function editaTarefas(componente_1, componente_2){
-        if(document.getElementById(componente_1).style.display== "none"){
+        if(document.getElementById(componente_1).style.display == "none"){
             document.getElementById(componente_1).style.display = "block";
             document.getElementById(componente_2).style.display = "none";
         }
@@ -211,7 +220,7 @@
            <button class="btn btn-outline-info" style="float: right;margin-left: 5px;" data-toggle="modal" data-target="#adicionar">
                Adicionar
            </button>
-            <button class="btn btn-outline-warning" style="float: right;" onclick="editaTarefas('agenda', 'detalheAgenda')">
+            <button class="btn btn-outline-warning" style="float: right;" onclick="editaTarefas('agenda', 'alteraAgenda')">
                 Editar
             </button>
 
@@ -220,9 +229,39 @@
                 <div id='calendar'></div>
             </div>
             <div id="alteraAgenda">
+                <?php
+                //var_dump(mysqli_fetch_array($dados_edicao));exit;
+                    while ($linha = mysqli_fetch_array($dados_edicao)){
+                        /*var_dump($linha['idagenda']);
+                        var_dump($linha['tarefa']);
+                        var_dump($linha['data_inicio']);
+                        var_dump($linha['data_fim']);
+                        var_dump($linha['nivel']);
+                        var_dump($linha['descricao']);*/
 
+                        echo '<form class="form-inline" method="POST" action="?edit=TRUE" style="padding: 5px;">
+                                  <div class="form-group">
+                                    <input type="text" class="form-control" id="tarefa" name="tarefa" value='.$linha['tarefa'].'>&nbsp;
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" data-toggle="tooltip" data-placement="top" title="Data de início anterior">'.date('d-m-Y H:m', strtotime($linha['data_inicio'])).'</span>                                    
+                                    </div>
+                                    <input class="form-control" type="datetime-local" id="data_inicio" name="data_inicio">&nbsp;                                    
+                                  </div>
+                                  <div class="form-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" data-toggle="tooltip" data-placement="top" title="Data de término anterior">'.date('d-m-Y H:m', strtotime($linha['data_fim'])).'</span>                                    
+                                    </div>
+                                    <input class="form-control" type="datetime-local" name="data_fim" id="data_fim">&nbsp;
+                                  </div>
+                                  <input id="idagenda" type="hidden">
+                                  <input type="checkbox" class="form-check" name="excluir" id="excluir" value="X" data-toggle="tooltip" data-placement="top" title="Excluir">&nbsp;
+                                  <button type="submit" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Salvar">OK</button>                                                               
+                               </form>';
+                    }
+                ?>
             </div>
-
 
         </div>
         <!-- /.container-fluid -->
