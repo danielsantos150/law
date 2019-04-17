@@ -22,8 +22,26 @@
         echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=calendario.php'>";
     }
 
-    if(isset($_GET["edit"])  && $_GET['edit'] == true){
-        var_dump($_POST);exit;
+    if(isset($_GET["edit"]) && $_GET['edit'] == true){
+
+        if(!is_null($_POST['idagenda']) && isset($_POST['excluir']) && $_POST['excluir'] == "on"){
+
+            $idagenda = $_POST['idagenda'];
+            $result_exclusao_agenda = $model->exclui_tarefa_agenda("10701027681", $idagenda ,$con);
+
+            echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=calendario.php'>";
+
+        }else if(isset($_GET["edit"]) && $_POST['data_inicio'] && $_POST['data_inicio']){
+            var_dump($_POST);
+
+            $nova_data_inicio = $_POST["data_inicio"];
+            $nova_data_fim = $_POST["data_fim"];
+            $idagenda = $_POST["idagenda"];
+
+            $result_altera_data_agenda = $model->altera_tarefa_agenda("10701027681", $idagenda, $nova_data_inicio, $nova_data_fim, $con);
+
+            echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=calendario.php'>";
+        }
     }
 
 ?>
@@ -228,17 +246,9 @@
             <div id="agenda">
                 <div id='calendar'></div>
             </div>
-            <div id="alteraAgenda">
+            <div id="alteraAgenda" style="display: none;">
                 <?php
-                //var_dump(mysqli_fetch_array($dados_edicao));exit;
                     while ($linha = mysqli_fetch_array($dados_edicao)){
-                        /*var_dump($linha['idagenda']);
-                        var_dump($linha['tarefa']);
-                        var_dump($linha['data_inicio']);
-                        var_dump($linha['data_fim']);
-                        var_dump($linha['nivel']);
-                        var_dump($linha['descricao']);*/
-
                         echo '<form class="form-inline" method="POST" action="?edit=TRUE" style="padding: 5px;">
                                   <div class="form-group">
                                     <input type="text" class="form-control" id="tarefa" name="tarefa" value='.$linha['tarefa'].'>&nbsp;
@@ -255,8 +265,8 @@
                                     </div>
                                     <input class="form-control" type="datetime-local" name="data_fim" id="data_fim">&nbsp;
                                   </div>
-                                  <input id="idagenda" type="hidden">
-                                  <input type="checkbox" class="form-check" name="excluir" id="excluir" value="X" data-toggle="tooltip" data-placement="top" title="Excluir">&nbsp;
+                                  <input id="idagenda" type="hidden" name="idagenda" value='.$linha['idagenda'].'>
+                                  <input type="checkbox" class="form-check" name="excluir" id="excluir" data-toggle="tooltip" data-placement="top" title="Excluir">&nbsp;
                                   <button type="submit" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Salvar">OK</button>                                                               
                                </form>';
                     }
