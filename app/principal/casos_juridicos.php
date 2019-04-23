@@ -1,3 +1,10 @@
+<?php
+
+    include_once "casos_juridicos_list.php";
+
+    $nomeAdvogado = "Dr. Daniel Santos";
+
+?>
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -26,7 +33,7 @@
 
   <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="index.html">E-LAW</a>
+    <a class="navbar-brand mr-1" href="index.php">E-LAW</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
@@ -54,7 +61,7 @@
           <i class="fas fa-user-circle fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-          <a class="dropdown-item" href="#">Meu Perfil</a>
+          <a class="dropdown-item" href="perfil.php">Meu Perfil</a>
           <a class="dropdown-item" href="#">Preferências</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Sair</a>
@@ -69,7 +76,7 @@
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="index.php">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Painel de Controle</span>
         </a>
@@ -83,7 +90,7 @@
           <!-- <h6 class="dropdown-header">Other Pages:</h6> -->
           <a class="dropdown-item" href="mensagens.html">Mensagens</a>
           <a class="dropdown-item" href="calendario.php">Calendário</a>
-          <a class="dropdown-item" href="casos_juridicos.html">Casos Jurídicos</a>
+          <a class="dropdown-item" href="casos_juridicos.php">Casos Jurídicos</a>
           <a class="dropdown-item" href="anotacoes.html">Anotações</a>
         </div>
       </li>
@@ -98,23 +105,30 @@
           <span>Tables</span></a>
       </li>
     </ul>
-
       <div id="content-wrapper">
-
         <div class="container-fluid">
-
           <!-- Breadcrumbs-->
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <a href="index.html">Painel de Controle</a>
+              <a href="index.php">Painel de Controle</a>
             </li>
             <li class="breadcrumb-item active">Casos Jurídicos</li>
           </ol>
 
           <!-- Page Content -->
-          <h1>Tela Casos Jurídicos</h1>
+          <h1>Casos Jurídicos</h1>
           <hr>
-          <p>Ainda é necessário criar.</p>
+          <p>Caro Advogado(a), nesta secção serão apresentados todos os casos jurídicos por você cadastrados na plataforma.</p>
+          <hr>
+          <!-- DataTables Example -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <i class="fas fa-folder-open"></i>
+              Casos Jurídicos do <?php echo $nomeAdvogado; ?> </div>
+
+              <?php echo $listagem_casos; ?>
+
+          </div>
 
         </div>
         <!-- /.container-fluid -->

@@ -9,7 +9,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>SB Admin - Blank Page</title>
+  <title>E-LAW - Seu caso no seu controle</title>
 
   <!-- Custom fonts for this template-->
   <link href="../Util/principal/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -81,10 +81,10 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <!-- <h6 class="dropdown-header">Other Pages:</h6> -->
-          <a class="dropdown-item" href="blank.html">Mensagens</a>
-          <a class="dropdown-item" href="blank.html">Calendário</a>
-          <a class="dropdown-item" href="blank.html">Casos Jurídicos</a>
-          <a class="dropdown-item" href="blank.html">Anotações</a>
+          <a class="dropdown-item" href="mensagens.html">Mensagens</a>
+          <a class="dropdown-item" href="calendario.php">Calendário</a>
+          <a class="dropdown-item" href="casos_juridicos.php">Casos Jurídicos</a>
+          <a class="dropdown-item" href="anotacoes.html">Anotações</a>
         </div>
       </li>
       <li class="nav-item">
@@ -99,39 +99,115 @@
       </li>
     </ul>
 
-      <div id="content-wrapper">
+    <div id="content-wrapper">
 
-        <div class="container-fluid">
+      <div class="container-fluid">
 
-          <!-- Breadcrumbs-->
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="index.php">Painel de Controle</a>
-            </li>
-            <li class="breadcrumb-item active">Blank Page</li>
-          </ol>
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="index.php">Painel de Controle</a>
+          </li>
+          <li class="breadcrumb-item active">Home</li>
+        </ol>
 
-          <!-- Page Content -->
-          <h1>Blank Page</h1>
-          <hr>
-          <p>This is a great starting point for new custom pages.</p>
-
-        </div>
-        <!-- /.container-fluid -->
-
-        <!-- Sticky Footer -->
-        <footer class="sticky-footer">
-          <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-              <span>Copyright © Your Website 2019</span>
+        <!-- Icon Cards-->
+        <div class="row">
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-primary o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fas fa-fw fa-comments"></i>
+                </div>
+                <div class="mr-5">Mensagens!</div>
+              </div>
+              <a class="card-footer text-white clearfix small z-1" href="mensagens.html">
+                <span class="float-left">Ver mais</span>
+                <span class="float-right">
+                  <i class="fas fa-angle-right"></i>
+                </span>
+              </a>
             </div>
           </div>
-        </footer>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-warning o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fas fa-fw fa-list"></i>
+                </div>
+                <div class="mr-5">Calendário!</div>
+              </div>
+              <a class="card-footer text-white clearfix small z-1" href="calendario.php">
+                <span class="float-left">Ver mais</span>
+                <span class="float-right">
+                  <i class="fas fa-angle-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-success o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fas fa-fw fa-shopping-cart"></i>
+                </div>
+                <div class="mr-5">Casos Jurídicos!</div>
+              </div>
+              <a class="card-footer text-white clearfix small z-1" href="casos_juridicos.php">
+                <span class="float-left">Ver mais</span>
+                <span class="float-right">
+                  <i class="fas fa-angle-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-dark o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <i class="fas fa-fw fa-life-ring"></i>
+                </div>
+                <div class="mr-5">Anotações!</div>
+              </div>
+              <a class="card-footer text-white clearfix small z-1" href="anotacoes.html">
+                <span class="float-left">Ver mais</span>
+                <span class="float-right">
+                  <i class="fas fa-angle-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Area Chart Example-->
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-chart-area"></i>
+            Area Chart Example</div>
+          <div class="card-body">
+            <canvas id="myAreaChart" width="100%" height="30"></canvas>
+          </div>
+          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        </div>
+
+
 
       </div>
-      <!-- /.content-wrapper -->
+      <!-- /.container-fluid -->
+
+      <!-- Sticky Footer -->
+      <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Your Website 2019</span>
+          </div>
+        </div>
+      </footer>
 
     </div>
+    <!-- /.content-wrapper -->
+
+  </div>
   <!-- /#wrapper -->
 
   <!-- Scroll to Top Button-->
@@ -165,8 +241,17 @@
   <!-- Core plugin JavaScript-->
   <script src="../Util/principal/vendor/jquery-easing/jquery.easing.min.js"></script>
 
+  <!-- Page level plugin JavaScript-->
+  <script src="../Util/principal/vendor/chart.js/Chart.min.js"></script>
+  <script src="../Util/principal/vendor/datatables/jquery.dataTables.js"></script>
+  <script src="../Util/principal/vendor/datatables/dataTables.bootstrap4.js"></script>
+
   <!-- Custom scripts for all pages-->
   <script src="../Util/principal/js/sb-admin.min.js"></script>
+
+  <!-- Demo scripts for this page-->
+  <script src="../Util/principal/js/demo/datatables-demo.js"></script>
+  <script src="../Util/principal/js/demo/chart-area-demo.js"></script>
 
 </body>
 
