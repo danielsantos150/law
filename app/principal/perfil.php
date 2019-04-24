@@ -5,6 +5,7 @@
  * Date: 19/04/2019
  * Time: 17:21
  */
+
     include_once "../connections/conections.php";
     include_once "../connections/model.php";
     $model = new Model();
@@ -24,7 +25,7 @@
     $endereco_profissional = "RUA BERNARDO MASCARENHAS, 25 CIDADE JARDIM, CEP: ".$cep;
     $formacao = "UNIVERSIDADE FEDERAL DE MINAS GERAIS - UFMG / Ano: 1992";
 
-    if(isset($_POST["mural"]) && $_POST["mural"] != ""){
+    if((isset($_POST["mural"]) && $_POST["mural"] != "")){
         $mural_novo = $_POST["mural"];
 
         $is_link = strstr($mural_novo, "www.") ? 1 : 0;
@@ -32,14 +33,25 @@
         if($is_link){
             $mural_novo = "O advogado disponibilizou um novo link".$mural_novo;
         }
-
-        $result_novo_mural = $model->inserir_mural_advogado("10701027681", $mural_novo, $is_link, $con);
+        if($mural_novo != ""){
+            $result_novo_mural = $model->inserir_mural_advogado("10701027681", $mural_novo, $is_link, $con);
+        }
         $_POST["mural"] = NULL;
 
-        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=perfil.php'>";
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='0;URL=perfil.php'>";
     }
 
     $dados_mural_existente = $dados_mural;
+
+    if(isset($_POST["cep_advogado"]) && !(is_null($_POST["input_nome"]))){
+
+        $telefone_new = $_POST["input_telefone"];
+        $formacao_new = $_POST["input_formacao"];
+        $cep_new = $_POST["cep_advogado"];
+
+        $result_atualiza_dados_advogado = $model->atualiza_dados_advogado("10701027681", $telefone_new, $formacao_new, $cep_new, $con);
+
+    }
 
 ?>
 
@@ -185,13 +197,13 @@
                                         <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Sobre</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Mural</a>
+                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Editar Perfil</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="mural-tab" data-toggle="tab" href="#mural" role="tab" aria-controls="mural" aria-selected="false">Mural</a>
                                     </li>
                                 </ul>
                             </div>
-                        </div>
-                        <div class="col-md-2"> <!-- VER COMO FAZER PARA EDITAR O PERFIL -->
-                            <button class="profile-edit-btn" name="btnAddMore" onclick="exibirEdicao('perfil_Edit', 'perfil')">Editar Perfil</button>
                         </div>
                     </div>
                     <div class="row">
@@ -204,7 +216,7 @@
                                 <a href="" style="pointer-events: none; cursor: default;">Data de Inscrição: <span style="color: #8c8c8c;"><?php echo $data_inscricao; ?></span></a><br/>
                             </div>
                         </div>
-                        <div id="perfil" name="perfil" class="col-md-8" style="display: block;">
+                        <div id="perfil" name="perfil" class="col-md-8">
                             <div class="tab-content profile-tab" id="myTabContent">
                                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                     <div class="row">
@@ -243,14 +255,56 @@
                                 </div>
 
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <form class="form" method="POST" id="form_edita_perfil" action="?edit=perfil">
+                                        <div class="row" style="padding: 2px;">
+                                            <div class="col-md-4">
+                                                <label>Nome Completo</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="input-group-text" id="input_nome" name="input_nome" size="50" value="<?php echo $nome_advogado; ?>"/>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 2px;">
+                                            <div class="col-md-4">
+                                                <label>Telefone Profissional</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="input-group-text" id="input_telefone" name="input_telefone" size="50" onkeypress="mascara(this, '(##)#####-####')" maxlength="15" value="<?php echo $telefone_principal; ?>"/>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 2px;">
+                                            <div class="col-md-4">
+                                                <label>Formação Profissional</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <input type="text" class="input-group-text" id="input_formacao" name="input_formacao" size="50" value="<?php echo $formacao; ?>"/>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding: 2px;">
+                                            <div class="col-md-4">
+                                                <label>Endereço Profissional (CEP)</label>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <p><input type="text" class="input-group-text" id="cep_advogado" name="cep_advogado" onkeypress="mascara(this, '##.###-###')" maxlength="10" value="<?php echo $cep; ?>"/>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div style="float: right;">
+                                            <button type="submit" class="btn btn-outline-success"><i class="fas fa-check-circle"></i> Atualizar</button>
+                                        </div>
+
+                                    </form>
+                                </div>
+
+                                <div class="tab-pane fade" id="mural" role="tabpanel" aria-labelledby="mural-tab">
                                     <p><?php echo $dados_mural_existente; ?></p>
                                     <div class="row">
-                                        <form class="form" method="POST" id="form_mural" action="?novo=m">
-                                            <div class="col-md-8">
+                                        <form class="form" method="POST" id="form_mural" action="">
+                                            <div class="col-md-8" style='width: 455px;'>
                                                 <textarea type="text" class="form-control" id="mural" name="mural" placeholder="Digite aqui o seu texto"></textarea>
-                                            </div>
+                                            </div><hr>
                                             <div class="col-md-4">
-                                                <button type="submit" class="btn btn-outline-success">Postar</button>
+                                                <button type="submit" class="btn btn-outline-success btn1">Postar</button>
                                             </div>
                                         </form>
                                     </div>
@@ -259,39 +313,7 @@
                         </div>
                         <div id="edit_perfil" name="edit_perfil" style="display: none;">
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Nome Completo</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input id="input_nome" name="input_nome" value="<?php echo $nome_advogado; ?>"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Telefone Profissional</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input id="input_nome" name="input_nome" value="<?php echo $telefone_principal; ?>"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Formação Profissional</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <input id="input_nome" name="input_nome" value="<?php echo $formacao; ?>"/>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>Endereço Profissional</label>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <p><?php echo $endereco_profissional; ?></p>
-                                        <p><a target="_blank" href="https://www.google.com/maps/dir/?api=1&origin=&destination=<?php echo $cep; ?>">Ver Trajeto<img src="https://img.icons8.com/color/420/google-maps.png" height="30" width="30"></a></p>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -350,6 +372,22 @@
 
 <!-- Custom scripts for all pages-->
 <script src="../Util/principal/js/sb-admin.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript"></script>
+
+<script>
+    function mascara(t, mask){
+        var i = t.value.length;
+
+        var saida = mask.substring(2,1);
+        var texto = mask.substring(i);
+        if (texto.substring(0,1) != saida){
+
+            t.value += texto.substring(0,1);
+        }
+    }
+
+</script>
 
 </body>
 
