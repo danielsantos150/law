@@ -95,7 +95,7 @@
       <li class="nav-item">
         <a class="nav-link" href="tabelas.html">
           <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
+          <span>Tabelas</span></a>
       </li>
     </ul>
 
@@ -180,7 +180,7 @@
         </div>
 
         <!-- Area Chart Example-->
-        <div class="card mb-3">
+        <!-- <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-chart-area"></i>
             Area Chart Example</div>
@@ -188,7 +188,7 @@
             <canvas id="myAreaChart" width="100%" height="30"></canvas>
           </div>
           <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-        </div>
+        </div>-->
 
 
 

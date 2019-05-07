@@ -6,47 +6,42 @@
  * Time: 20:00
  */
 
-/*
- * <tfoot>
- *  <tr>
- *   <th>N º.</th>
- *   <th>Título</th>
- *   <th>Escritório</th>
- *   <th>Nome Cliente</th>
- *   <th>Última Atualização</th>
- *   <th>Mais Informações</th>
- *  </tr>
- * </tfoot>
- * */
+    include_once "../connections/conections.php";
+    include_once "../connections/model.php";
 
+    $model = new Model();
 
+    $result_casos_advogado = $model->busca_casos_juridicos("10701027681", $con);
 
-$listagem_casos = '<div class="card-body">
-                      <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                          <thead>
-                          <tr>
-                            <th>N º.</th>
-                            <th>Título</th>
-                            <th>Escritório</th>
-                            <th>Nome Cliente</th>
-                            <th>Última Atualização</th>
-                            <th>Mais Informações</th>
-                          </tr>
-                          </thead>                          
-                          <tbody>
-                          <tr>
-                            <td>12312312312</td>
-                            <td>ainda</td>
-                            <td>falta</td>
-                            <td>implementar</td>
-                            <td>os</td>
-                            <td>casos juridicos</td>
-                          </tr>
-                          </tbody>
-                        </table>
-                      </div>
+    $listagem_casos = '<div class="card-body">
+                          <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                              <thead>
+                              <tr>
+                                <th>N º.</th>
+                                <th>Nome Cliente</th>
+                                <th>Assunto</th>
+                                <th>Classe Judicial</th>
+                                <th>Última Atualização</th>
+                                <th>Mais Informações</th>
+                              </tr>
+                              </thead> ';
+
+    while ($linha_caso = mysqli_fetch_array($result_casos_advogado)){
+
+        $listagem_casos.='    <tbody>
+                              <tr>
+                                <td>'.$linha_caso["numero_caso"].'</td>
+                                <td>'.$linha_caso["nome_cliente"].'</td>
+                                <td>'.$linha_caso["titulo_processo"].'</td>
+                                <td>'.$linha_caso["classe_judicial"].'</td>
+                                <td>'.$linha_caso["ultima_alteracao"].'</td>
+                                <td><button type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Entrar!" style="text-align:center;" onclick="window.location.href=\'detalhe_caso.php?caso='.$linha_caso["id_caso"].'\'"><i class="fas fa-door-open"></i></button></td>
+                              </tr>
+                              </tbody>
+                            ';
+    }
+
+    $listagem_casos.= '</table>
                     </div>
-                    <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>';
-
-?>
+                </div>';

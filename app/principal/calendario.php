@@ -32,7 +32,7 @@
             echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=calendario.php'>";
 
         }else if(isset($_GET["edit"]) && $_POST['data_inicio'] && $_POST['data_inicio']){
-            var_dump($_POST);
+            //var_dump($_POST);
 
             $nova_data_inicio = $_POST["data_inicio"];
             $nova_data_fim = $_POST["data_fim"];
@@ -217,7 +217,7 @@
       <li class="nav-item">
         <a class="nav-link" href="tabelas.html">
           <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
+          <span>Tabelas</span></a>
       </li>
     </ul>
 

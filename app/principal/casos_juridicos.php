@@ -2,7 +2,7 @@
 
     include_once "casos_juridicos_list.php";
 
-    $nomeAdvogado = "Dr. Daniel Santos";
+    $nomeAdvogado = "Dr. Fernando Junior";
 
 ?>
 <!DOCTYPE html>
@@ -72,7 +72,6 @@
   </nav>
 
   <div id="wrapper">
-
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
       <li class="nav-item active">
@@ -102,9 +101,10 @@
       <li class="nav-item">
         <a class="nav-link" href="tabelas.html">
           <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
+          <span>Tabelas</span></a>
       </li>
     </ul>
+
       <div id="content-wrapper">
         <div class="container-fluid">
           <!-- Breadcrumbs-->
@@ -129,7 +129,6 @@
               <?php echo $listagem_casos; ?>
 
           </div>
-
         </div>
         <!-- /.container-fluid -->
 
@@ -144,8 +143,7 @@
 
       </div>
       <!-- /.content-wrapper -->
-
-    </div>
+  </div>
   <!-- /#wrapper -->
 
   <!-- Scroll to Top Button-->
@@ -181,6 +179,12 @@
 
   <!-- Custom scripts for all pages-->
   <script src="../Util/principal/js/sb-admin.min.js"></script>
+
+  <script>
+      $(function () {
+          $('[data-toggle="tooltip"]').tooltip()
+      })
+  </script>
 
 </body>
 
