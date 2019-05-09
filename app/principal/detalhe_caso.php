@@ -1,5 +1,7 @@
 <?php
 
+    $select_casos_existentes = "";
+
     include_once "casos_juridicos_list.php";
 
     $model = new Model;
@@ -32,9 +34,22 @@
             $cpfcnpj_poloPassivo    = $linha_caso["cpfcnpj_poloPassivo"];
             $posicao                = $linha_caso["position"];
         }
+
+        $result_ocorrencias = $model->busca_ocorrencias_caso($idcaso, $con);
+
+        $result_ocorrencias_modal = $result_ocorrencias;
+    }
+
+    if(isset($_GET["caso"]) && isset($_GET["excluir"])){
+
+        $id_ocorrencia = $_GET["excluir"];
+        $result_exclusao = $model->exclui_ocorrencia_caso($id_ocorrencia, $con);
+
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=detalhe_caso.php'>";
     }
 
     $result_status = $model->busca_status_casos_juridicos($con);
+
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -146,7 +161,24 @@
                     <li class="breadcrumb-item active">Casos Jurídicos</li>
                     <li class="breadcrumb-item active">Caso nº <?php echo $numero_caso; ?></li>
                 </ol>
-                <div class="card">
+                <div class="card" style="margin-top: 5px;">
+                    <div class="card-body">
+                        <div class="row">
+                            <?php
+                            $aux = $status - 10;
+                            while ($status_juridicos = mysqli_fetch_array($result_status)){
+                                echo "<button style='font-size: 12px;' data-toggle='progressbar' data-target='#statusCase' class='btn btn-default' data-value='".($aux+= 10)."'>".$status_juridicos['descricao_status']."</button>";
+                            }
+                            ?>
+                        </div>
+                        <div id="statusCase" class="progress col-md-12" style="margin-top: 5px;">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $status; ?>%;">
+                                <span><?php echo $status; ?>% Completo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 5px;">
                     <p class="card-header h6" data-toggle="collapse" href="#dadosResumido" role="button" aria-expanded="false" aria-controls="dadosResumido">
                         Dados do Processo <span style="float: right; color: #ccc;" class="fa fa-chevron-down"></span>
                     </p>
@@ -202,60 +234,55 @@
                         </div>
                     </div>
                 </div>
-                <!--
-                    <p>
-                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="reset" data-level="info" class="btn btn-success">Reset</button>
-                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="0" class="btn btn-default">0%</button>
-                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="10" class="btn btn-default">10%</button>
-                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="30" class="btn btn-default">30%</button>
-                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="75" class="btn btn-default">75%</button>
-                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="100" class="btn btn-default">100%</button>
-                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="finish" data-level="success" class="btn btn-default">Finish</button>
-                    </p>
-                    <div id="myProgressbar" class="progress">
-                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                            <span class="sr-only">0% Complete</span>
-                        </div>
-                    </div>
-                -->
                 <div class="card" style="margin-top: 5px;">
-                    <div class="card-body">
+                    <div class="card-header h6">Ocorrências
+                        <button class="btn btn-success" style="position: relative; float: right;" data-toggle="modal" data-target="#cadastroOcorrencia">
+                            <span class="fa fa-plus"></span>
+                        </button>
+                    </div>
+                    <div class="card card-body">
                         <div class="row">
-                            <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
                             <?php
-                            $aux = $status - 10;
-                                while ($status_juridicos = mysqli_fetch_array($result_status)){
-                                    echo "<button style='font-size: 10px;' data-toggle='progressbar' data-target='#statusCase' class='btn btn-default' data-value='".($aux+= 10)."'>".$status_juridicos['descricao_status']."</button>";
+                                while ($lista_ocorrencias = mysqli_fetch_array($result_ocorrencias)){
+                                    echo '<div class="col-xl-2 col-sm-2 mb-2" data-toggle="modal" data-target="#modalOcorrencia'.$lista_ocorrencias["id_ocorrencia"].'">
+                                            <div class="card text-white bg-warning o-hidden h-100">
+                                              <div class="card-body">
+                                                <div class="card-body-icon">
+                                                  <i class="fas fa-fw fa-pencil-alt"></i>
+                                                </div>
+                                                <div class="mr-6" style="text-align: center;">#'.$lista_ocorrencias["id_ocorrencia"].'</div>
+                                              </div>
+                                            </div>
+                                          </div>';
+
+                                    echo '<div class="modal fade" id="modalOcorrencia'.$lista_ocorrencias["id_ocorrencia"].'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                              <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                  <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Ocorrência nº.: '.$lista_ocorrencias["id_ocorrencia"].'</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                  </div>
+                                                  <div class="modal-body">
+                                                    '.$lista_ocorrencias["descricao_ocorrencia"].'
+                                                  </div>
+                                                  <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger"><a style="color: white;" href="detalhe_caso.php?caso='.$idcaso.'&excluir='.$lista_ocorrencias["id_ocorrencia"].'">Excluir</a></button>
+                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>';
                                 }
                             ?>
                         </div>
-                        <div id="statusCase" class="progress col-md-12" style="margin-top: 5px;">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $status; ?>%;">
-                                <span><?php echo $status; ?>% Completo</span>
-                            </div>
-                        </div>
-                        <br>
-                        <!--<button data-toggle="progressbar" data-target="#statusCase" data-value="<?php echo ($status + 10); ?>" class="btn btn-success">Avançar</button>-->
-                        <!--<button data-toggle="progressbar" data-target="#statusCase" data-value="<?php echo $status; ?>" data-level="info" class="btn btn-success">Reset</button>-->
                     </div>
                 </div>
 
 
-
-
-
-
         </div>
         <!-- /.container-fluid -->
-
-        <!-- Sticky Footer -->
-        <footer class="sticky-footer">
-          <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-              <span>Copyright © Your Website 2019</span>
-            </div>
-          </div>
-        </footer>
 
       </div>
       <!-- /.content-wrapper -->
@@ -284,6 +311,36 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Model nova ocorrencia -->
+
+  <div class="modal fade" id="cadastroOcorrencia" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Nova Ocorrência</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form role="form" id="form-cadastro" action="?caso=<?php echo $idcaso ?>&new=true" method="POST">
+                      <div class="form-group">
+                          <label for="casoJuridico">Caso Jurídico</label>
+                          <?php echo $select_casos_existentes; ?>
+                      </div>
+                      <div class="form-group">
+                          <label for="descricao">Descrição</label>
+                          <textarea type="text" class="form-control" id="descricaoOcorrencia" name="descricaoNovaOcorrencia"></textarea>
+                      </div>
+                      <div class="form-group">
+                          <button type="submit" class="btn btn-success">Cadastrar</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
   </div>
 
   <!-- Bootstrap core JavaScript-->
