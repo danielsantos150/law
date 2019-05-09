@@ -16,6 +16,7 @@
             $titulo_processo        = $linha_caso["titulo_processo"];
             $cpfcnpj_advogado       = $linha_caso["cpfcnpj_advogado"];
             $status                 = $linha_caso["status"];
+            $status                 = $status * 10;
             $ultima_alteracao       = $linha_caso["ultima_alteracao"];
             $nome_cliente           = $linha_caso["nome_cliente"];
             $tipo_processo          = $linha_caso["tipo_processo"];
@@ -25,8 +26,15 @@
             $numero_caso            = $linha_caso["numero_caso"];
             $classe_judicial        = $linha_caso["classe_judicial"];
             $orgao_julgador         = $linha_caso["orgao_julgador"];
+            $polo_ativo             = $linha_caso["polo_ativo"];
+            $polo_passivo           = $linha_caso["polo_passivo"];
+            $cpfcnpj_poloAtivo      = $linha_caso["cpfcnpj_poloAtivo"];
+            $cpfcnpj_poloPassivo    = $linha_caso["cpfcnpj_poloPassivo"];
+            $posicao                = $linha_caso["position"];
         }
     }
+
+    $result_status = $model->busca_status_casos_juridicos($con);
 ?>
 <!DOCTYPE html>
 <html lang="pt">
@@ -167,49 +175,70 @@
                     </div>
                 </div>
                 <div class="card" style="margin-top: 5px;">
-                    <p class="card-header h6">Polo Ativo</p>
+                    <p class="card-header h6">Polo Ativo <?php  if($posicao == 1){ echo "[CLIENTE]"; } ?></p>
                     <div class="card card-body">
                         <div class="row">
                             <div class="col-sm-3">
-                                <div class="img-picker"></div>
+                                CPF/CNPJ: <?php echo $cpfcnpj_poloAtivo; ?>
                             </div>
                             <div class="col-sm-9">
-                                <span style="font-weight: bold;">Número Processo</span><br>
-                                <?php echo $numero_caso; ?>
+                                <span style="font-weight: bold;">Autor</span><br>
+                                <?php echo $polo_ativo; ?>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="card" style="margin-top: 5px;">
-                    <p class="card-header h6">Polo Passivo</p>
+                    <p class="card-header h6">Polo Passivo <?php if($posicao == 0){ echo "[CLIENTE]"; } ?></p>
                     <div class="card card-body">
                         <div class="row">
                             <div class="col-sm-3">
-                                <span style="font-weight: bold;">Número Processo</span><br>
-                                <?php echo $numero_caso; ?>
+                                CPF/CNPJ: <?php echo $cpfcnpj_poloAtivo; ?>
                             </div>
                             <div class="col-sm-9">
-                                <span style="font-weight: bold;">Número Processo</span><br>
-                                <?php echo $numero_caso; ?>
+                                <span style="font-weight: bold;">Réu</span><br>
+                                <?php echo $polo_passivo; ?>
                             </div>
                         </div>
                     </div>
                 </div>
-                <p>
-                    <button data-toggle="progressbar" data-target="#myProgressbar" data-value="reset" data-level="info" class="btn btn-success">Reset</button>
-                    <button data-toggle="progressbar" data-target="#myProgressbar" data-value="0" class="btn btn-default">0%</button>
-                    <button data-toggle="progressbar" data-target="#myProgressbar" data-value="10" class="btn btn-default">10%</button>
-                    <button data-toggle="progressbar" data-target="#myProgressbar" data-value="30" class="btn btn-default">30%</button>
-                    <button data-toggle="progressbar" data-target="#myProgressbar" data-value="75" class="btn btn-default">75%</button>
-                    <button data-toggle="progressbar" data-target="#myProgressbar" data-value="100" class="btn btn-default">100%</button>
-                    <button data-toggle="progressbar" data-target="#myProgressbar" data-value="finish" data-level="success" class="btn btn-default">Finish</button>
-                </p>
-
-                <div id="myProgressbar" class="progress">
-                    <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
-                        <span class="sr-only">0% Complete</span>
+                <!--
+                    <p>
+                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="reset" data-level="info" class="btn btn-success">Reset</button>
+                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="0" class="btn btn-default">0%</button>
+                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="10" class="btn btn-default">10%</button>
+                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="30" class="btn btn-default">30%</button>
+                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="75" class="btn btn-default">75%</button>
+                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="100" class="btn btn-default">100%</button>
+                        <button data-toggle="progressbar" data-target="#myProgressbar" data-value="finish" data-level="success" class="btn btn-default">Finish</button>
+                    </p>
+                    <div id="myProgressbar" class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                            <span class="sr-only">0% Complete</span>
+                        </div>
+                    </div>
+                -->
+                <div class="card" style="margin-top: 5px;">
+                    <div class="card-body">
+                        <div class="row">
+                            <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
+                            <?php
+                                while ($status_juridicos = mysqli_fetch_array($result_status)){
+                                    echo "<button style='font-size: 10px;' data-toggle='progressbar' data-target='#statusCase' class='btn btn-default' data-value='".$aux = ($status + 10)."'>".$status_juridicos['descricao_status']."</button>";
+                                }
+                            ?>
+                        </div>
+                        <div id="statusCase" class="progress col-md-12" style="margin-top: 5px;">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $status; ?>%;">
+                                <span><?php echo $status; ?>% Completo</span>
+                            </div>
+                        </div>
+                        <br>
+                        <button data-toggle="progressbar" data-target="#statusCase" data-value="<?php echo ($status + 10); ?>" class="btn btn-success">Avançar</button>
+                        <button data-toggle="progressbar" data-target="#statusCase" data-value="<?php echo $status; ?>" data-level="info" class="btn btn-success">Reset</button>
                     </div>
                 </div>
+
 
 
 
