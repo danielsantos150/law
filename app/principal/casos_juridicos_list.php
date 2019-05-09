@@ -51,7 +51,7 @@
                                     <select class="form-control" id="numeroCasoJuridicos">';
 
     while ($linha_n_casos = mysqli_fetch_array($result_num_casos)){
-       $select_casos_existentes.='<option>'.$linha_n_casos["numero_caso"].'</option>';
+       $select_casos_existentes.='<option value='.$linha_n_casos["id_caso"].'>'.$linha_n_casos["numero_caso"].'</option>';
     }
 
     $select_casos_existentes.='</select></div>';
