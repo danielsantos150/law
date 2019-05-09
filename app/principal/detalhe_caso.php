@@ -223,8 +223,9 @@
                         <div class="row">
                             <!-- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-->
                             <?php
+                            $aux = $status - 10;
                                 while ($status_juridicos = mysqli_fetch_array($result_status)){
-                                    echo "<button style='font-size: 10px;' data-toggle='progressbar' data-target='#statusCase' class='btn btn-default' data-value='".$aux = ($status + 10)."'>".$status_juridicos['descricao_status']."</button>";
+                                    echo "<button style='font-size: 10px;' data-toggle='progressbar' data-target='#statusCase' class='btn btn-default' data-value='".($aux+= 10)."'>".$status_juridicos['descricao_status']."</button>";
                                 }
                             ?>
                         </div>
@@ -234,8 +235,8 @@
                             </div>
                         </div>
                         <br>
-                        <button data-toggle="progressbar" data-target="#statusCase" data-value="<?php echo ($status + 10); ?>" class="btn btn-success">Avançar</button>
-                        <button data-toggle="progressbar" data-target="#statusCase" data-value="<?php echo $status; ?>" data-level="info" class="btn btn-success">Reset</button>
+                        <!--<button data-toggle="progressbar" data-target="#statusCase" data-value="<?php echo ($status + 10); ?>" class="btn btn-success">Avançar</button>-->
+                        <!--<button data-toggle="progressbar" data-target="#statusCase" data-value="<?php echo $status; ?>" data-level="info" class="btn btn-success">Reset</button>-->
                     </div>
                 </div>
 
