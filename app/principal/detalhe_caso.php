@@ -101,7 +101,7 @@
             $tag_image .='<div class="col-xl-2 col-sm-2 mb-2">
                                             <div class="card text-white bg-warning o-hidden h-100">
                                               <div class="card-body">
-                                              <a target="_parent" id="linkarchi" name="linkarchi" href=file:///'.$file.'>
+                                              <a target="_blank" href="'.$file.'">
                                                 <div class="card-body-icon">
                                                  <i class="fas fa-fw fa-file-archive"></i>
                                                 </div> 
@@ -109,7 +109,7 @@
                                               </div>
                                             </div>
                                           </div>';
-
+            /* TODO - VERIFICAR COMO FAZER O DOWNLOAD DE ARQUIVO PDF */
             /*var_dump(__DIR__);
             $dir = str_replace("/", "\\", $file);
             var_dump($file);exit;*/
