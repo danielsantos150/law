@@ -45,10 +45,76 @@
         $id_ocorrencia = $_GET["excluir"];
         $result_exclusao = $model->exclui_ocorrencia_caso($id_ocorrencia, $con);
 
-        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=detalhe_caso.php'>";
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=detalhe_caso.php?caso=".$_GET['caso']."'>";
+    }
+
+    if(isset($_GET["caso"]) && isset($_GET["ocorrencia"]) && isset($_POST["casoid"])){
+       $idcaso = $_POST["casoid"];
+       $ocorrencia = $_POST["descricaoNovaOcorrencia"];
+
+       $result_nova_ocorrencia = $model->adiciona_nova_ocorrencia($idcaso, $ocorrencia, $con);
+
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=detalhe_caso.php?caso=".$_GET['caso']."'>";
     }
 
     $result_status = $model->busca_status_casos_juridicos($con);
+    $apresenta = FALSE;
+
+    $i = 1;
+    $lista_arquivos = array();
+    if(isset($_GET["caso"])){
+        $pasta = "../Util/files/".$numero_caso."/";
+        if(is_dir($pasta)){
+            $diretorio = dir($pasta);
+
+            while(($arquivo = $diretorio->read()) != false){
+                $lista_arquivos[] = $pasta.$arquivo;
+            }
+            $diretorio->close();
+        }else{
+            echo 'A pasta não existe.';
+        }
+    }
+    /* realizado unset para eliminação das duas primeiras casas */
+    unset($lista_arquivos[0]);
+    unset($lista_arquivos[1]);
+    $elementos_show = "";
+    $tag_image = "";
+    if(isset($_GET["upload"])){
+        $apresenta = TRUE;
+
+        foreach ($lista_arquivos as $file){
+                /*$tag_image .= '<a target="_blank" href="'.$file.'"<div class="col-xl-2 col-sm-2 mb-2" style="height:60px;">
+                                            <div class="card text-white bg-warning o-hidden h-100">
+                                              <div class="card-body">
+                                                <div class="card-body-icon">
+                                                  <i class="fas fa-fw fa-archive"></i>
+                                                </div>                                                
+                                              </div>
+                                            </div>
+                                          </div></a>';*/
+            $dir = str_replace("/", "\\", $file);
+            $dir = $file;
+            $dir_total = "file:///".__DIR__."/".$dir;
+            $dir_fish = str_replace("\\", "/", $dir_total);
+
+            $tag_image .='<div class="col-xl-2 col-sm-2 mb-2">
+                                            <div class="card text-white bg-warning o-hidden h-100">
+                                              <div class="card-body">
+                                              <a target="_parent" id="linkarchi" name="linkarchi" href=file:///'.$file.'>
+                                                <div class="card-body-icon">
+                                                 <i class="fas fa-fw fa-file-archive"></i>
+                                                </div> 
+                                                </a>                                               
+                                              </div>
+                                            </div>
+                                          </div>';
+
+            /*var_dump(__DIR__);
+            $dir = str_replace("/", "\\", $file);
+            var_dump($file);exit;*/
+        }
+    }
 
 ?>
 <!DOCTYPE html>
@@ -73,6 +139,10 @@
     <!-- Custom styles for this template-->
     <link href="../Util/principal/css/sb-admin.css" rel="stylesheet">
 
+    <style>
+        a { color: inherit;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -171,11 +241,14 @@
                             }
                             ?>
                         </div>
-                        <div id="statusCase" class="progress col-md-12" style="margin-top: 5px;">
+
+                        <div id="statusCase" class="progress" style="margin-top: 5px;">
                             <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $status; ?>%;">
                                 <span><?php echo $status; ?>% Completo</span>
                             </div>
                         </div>
+                        <br>
+                        <button class="btn btn-success">Movimentar</button>
                     </div>
                 </div>
                 <div class="card" style="margin-top: 5px;">
@@ -280,6 +353,22 @@
                     </div>
                 </div>
 
+                <div class="card" style="margin-top: 5px;">
+                    <div class="card-header h6">Área de Arquivos
+                        <button class="btn btn-success" style="position: relative; float: right;" data-toggle="modal" data-target="#cadastroArquivos">
+                                <span class="fa fa-archive"></span>
+                        </button>
+                    </div>
+                    <div class="card card-body">
+                        <div class="row">
+                           <?php
+                                if($apresenta){
+                                    echo $tag_image;
+                                }
+                           ?>
+                        </div>
+                    </div>
+                </div>
 
         </div>
         <!-- /.container-fluid -->
@@ -325,7 +414,7 @@
                   </button>
               </div>
               <div class="modal-body">
-                  <form role="form" id="form-cadastro" action="?caso=<?php echo $idcaso ?>&new=true" method="POST">
+                  <form role="form" id="form-cadastro" action="?caso=<?php echo $idcaso ?>&ocorrencia=true" method="POST">
                       <div class="form-group">
                           <label for="casoJuridico">Caso Jurídico</label>
                           <?php echo $select_casos_existentes; ?>
@@ -333,8 +422,38 @@
                       <div class="form-group">
                           <label for="descricao">Descrição</label>
                           <textarea type="text" class="form-control" id="descricaoOcorrencia" name="descricaoNovaOcorrencia"></textarea>
+                          <input type="hidden" id="casoid" name="casoid" value="<?php echo $idcaso ?>">
                       </div>
                       <div class="form-group">
+                          <button type="submit" class="btn btn-success">Cadastrar</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+  <!-- Modal novo arquivo -->
+
+  <div class="modal fade bd-example-modal-md" id="cadastroArquivos" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-md" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Anexar Aquivos</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form role="form" id="form-cadastro" action="recebe_upload.php" method="POST" enctype="multipart/form-data">
+                      <div class="row" style="margin-left: 15px;margin-bottom: 5px;">
+                          <div class="btn btn-outline-secondary botaoArquivo">Selecionar arquivo...</div>
+                          <input type="file" style="display: none;" id="arquivo" name="arquivo">
+                          <input type="hidden" id="numcaso" name="numcaso" value="<?php echo $numero_caso ?>">
+                          <input type="hidden" id="idcaso" name="idcaso" value="<?php echo $idcaso ?>">
+                      </div>
+                      <div style="margin-left: 15px;float: right;" >
                           <button type="submit" class="btn btn-success">Cadastrar</button>
                       </div>
                   </form>
@@ -353,9 +472,44 @@
   <!-- Custom scripts for all pages-->
   <script src="../Util/principal/js/sb-admin.min.js"></script>
 
-  <script src="https://code.jquery.com/jquery.js"></script>
-  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
   <script src="../Util/js/progressbar.js"></script>
+
+  <script>
+      var div = document.getElementsByClassName("botaoArquivo")[0];
+      var input = document.getElementById("arquivo");
+
+      div.addEventListener("click", function(){
+          input.click();
+      });
+      input.addEventListener("change", function(){
+          var nome = "Não há arquivo selecionado. Selecionar arquivo...";
+          if(input.files.length > 0) nome = input.files[0].name;
+          div.innerHTML = nome;
+      });
+  </script>
+
+  <script>
+      // Get the modal
+      var modal = document.getElementById("myModal");
+
+      // Get the image and insert it inside the modal - use its "alt" text as a caption
+      var img = document.getElementById("myImg");
+      var modalImg = document.getElementById("img01");
+      var captionText = document.getElementById("caption");
+      img.onclick = function(){
+          modal.style.display = "block";
+          modalImg.src = this.src;
+          captionText.innerHTML = this.alt;
+      }
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+          modal.style.display = "none";
+      }
+  </script>
 
 </body>
 
