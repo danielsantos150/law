@@ -80,20 +80,10 @@
     unset($lista_arquivos[1]);
     $elementos_show = "";
     $tag_image = "";
-    if(isset($_GET["upload"])){
+    if(isset($_GET["caso"])){
         $apresenta = TRUE;
 
         foreach ($lista_arquivos as $file){
-                /*$tag_image .= '<a target="_blank" href="'.$file.'"<div class="col-xl-2 col-sm-2 mb-2" style="height:60px;">
-                                            <div class="card text-white bg-warning o-hidden h-100">
-                                              <div class="card-body">
-                                                <div class="card-body-icon">
-                                                  <i class="fas fa-fw fa-archive"></i>
-                                                </div>                                                
-                                              </div>
-                                            </div>
-                                          </div></a>';*/
-            $dir = str_replace("/", "\\", $file);
             $dir = $file;
             $dir_total = "file:///".__DIR__."/".$dir;
             $dir_fish = str_replace("\\", "/", $dir_total);
@@ -101,7 +91,7 @@
             $tag_image .='<div class="col-xl-2 col-sm-2 mb-2">
                                             <div class="card text-white bg-warning o-hidden h-100">
                                               <div class="card-body">
-                                              <a target="_blank" href="'.$file.'">
+                                              <a target="_blank" href="chrome-extension://oemmndcbldboiebfnladdacbdfmadadm/'.$dir_fish.'">                                              
                                                 <div class="card-body-icon">
                                                  <i class="fas fa-fw fa-file-archive"></i>
                                                 </div> 
@@ -109,12 +99,29 @@
                                               </div>
                                             </div>
                                           </div>';
-            /* TODO - VERIFICAR COMO FAZER O DOWNLOAD DE ARQUIVO PDF */
-            /*var_dump(__DIR__);
-            $dir = str_replace("/", "\\", $file);
-            var_dump($file);exit;*/
         }
     }
+
+    $result_movimentacoes = $model->busca_movimentacoes_caso($idcaso, "10701027681", $con);
+
+    if(isset($_GET["caso"]) && isset($_GET["movimentacao"])){
+        //var_dump($_POST);exit;
+
+        if(isset($_POST["customSwitch1"])){
+            $arquivado = 1;
+        }else{
+            $arquivado = 0;
+        }
+        $descricao = $_POST["texto_movimento"];
+        $num_caso = $_GET["caso"];
+
+
+        $result_insere_movimentacao = $model->cadastra_movimentacoes($descricao, $idcaso, '10701027681', $num_caso, $arquivado, $con);
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=detalhe_caso.php?caso=".$_GET['caso']."'>";
+        /* TODO realizar operação com o cadastro de movimentação do caso jurídico (cadastrar tarefa na agenda e adicionar notificação) */
+    }
+
+
 
 ?>
 <!DOCTYPE html>
@@ -232,26 +239,6 @@
                     <li class="breadcrumb-item active">Caso nº <?php echo $numero_caso; ?></li>
                 </ol>
                 <div class="card" style="margin-top: 5px;">
-                    <div class="card-body">
-                        <div class="row">
-                            <?php
-                            $aux = $status - 10;
-                            while ($status_juridicos = mysqli_fetch_array($result_status)){
-                                echo "<button style='font-size: 12px;' data-toggle='progressbar' data-target='#statusCase' class='btn btn-default' data-value='".($aux+= 10)."'>".$status_juridicos['descricao_status']."</button>";
-                            }
-                            ?>
-                        </div>
-
-                        <div id="statusCase" class="progress" style="margin-top: 5px;">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $status; ?>%;">
-                                <span><?php echo $status; ?>% Completo</span>
-                            </div>
-                        </div>
-                        <br>
-                        <button class="btn btn-success">Movimentar</button>
-                    </div>
-                </div>
-                <div class="card" style="margin-top: 5px;">
                     <p class="card-header h6" data-toggle="collapse" href="#dadosResumido" role="button" aria-expanded="false" aria-controls="dadosResumido">
                         Dados do Processo <span style="float: right; color: #ccc;" class="fa fa-chevron-down"></span>
                     </p>
@@ -352,7 +339,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card" style="margin-top: 5px;">
                     <div class="card-header h6">Área de Arquivos
                         <button class="btn btn-success" style="position: relative; float: right;" data-toggle="modal" data-target="#cadastroArquivos">
@@ -366,6 +352,47 @@
                                     echo $tag_image;
                                 }
                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 5px;">
+                    <div class="card-header h6">Movimentações
+                        <button class="btn btn-success" style="position: relative; float: right;" data-toggle="modal" data-target="#modalCadastraMovimentacao">
+                            <span class="fa fa-arrow-alt-circle-right"></span>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col" style="color: #8c8c8c;">Data</th>
+                                    <th scope="col" style="color: #8c8c8c;">Movimento</th>
+
+                                    <th scope="col" style="color: #8c8c8c;">Arquivado</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                while ($lista_movimentacoes = mysqli_fetch_array($result_movimentacoes)){
+                                    echo '<tr>
+                                              <th scope="row">'.$lista_movimentacoes["data_movimentacao"].'</th>
+                                              <td>'.$lista_movimentacoes["descricao_movimentacao"].'</td>';
+
+                                    if($lista_movimentacoes["arquivado"] == 1){
+                                        echo '<td><button class="btn btn-success">
+                                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                            </button></td>';
+                                    }else{
+                                        echo '<td><button class="btn btn-danger">
+                                                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                            </button></td>';
+                                    }
+                                    echo '</tr>';
+                                }
+                                ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -447,6 +474,9 @@
               </div>
               <div class="modal-body">
                   <form role="form" id="form-cadastro" action="recebe_upload.php" method="POST" enctype="multipart/form-data">
+                      <div class="row">
+                          <p style="color: red; font-style: italic; font-weight: bold;">&nbsp;&nbsp;&nbsp;Por gentileza selecione apenas arquivos .PDF</p>
+                      </div>
                       <div class="row" style="margin-left: 15px;margin-bottom: 5px;">
                           <div class="btn btn-outline-secondary botaoArquivo">Selecionar arquivo...</div>
                           <input type="file" style="display: none;" id="arquivo" name="arquivo">
@@ -462,6 +492,41 @@
       </div>
   </div>
 
+
+  <!-- Model cadastro movimentação -->
+  <div class="modal fade" id="modalCadastraMovimentacao" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Movimentar caso nº <?php echo $numero_caso; ?></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form role="form" id="form-cadastro" action="?caso=<?php echo $idcaso ?>&movimentacao=true" method="POST">
+                      <div class="form-group">
+                          <label for="movimentotext">Descrição</label>
+                          <textarea type="text" class="form-control" id="texto_movimento" name="texto_movimento"></textarea>
+                          <input type="hidden" id="casoid" name="casoid" value="<?php echo $idcaso ?>">
+                          <input type="hidden" id="casonum" name="casonum" value="<?php echo $numero_caso ?>">
+                      </div>
+                      <div class="form-group">
+                          <div class="custom-control custom-switch">
+                              <input type="checkbox" class="custom-control-input" id="customSwitch1" name="customSwitch1">
+                              <label class="custom-control-label" for="customSwitch1" data-toggle="tooltip" data-placement="right" title="Casos arquivados não podem ser reabertos.">Arquivar Caso Júridico</label>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <button type="submit" class="btn btn-success">Movimentar</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
   <!-- Bootstrap core JavaScript-->
   <script src="../Util/principal/vendor/jquery/jquery.min.js"></script>
   <script src="../Util/principal/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -475,6 +540,10 @@
   <script src="../Util/js/progressbar.js"></script>
 
   <script>
+      $(document).ready(function(){
+          $('[data-toggle="tooltip"]').tooltip();
+      });
+
       var div = document.getElementsByClassName("botaoArquivo")[0];
       var input = document.getElementById("arquivo");
 
@@ -486,29 +555,6 @@
           if(input.files.length > 0) nome = input.files[0].name;
           div.innerHTML = nome;
       });
-  </script>
-
-  <script>
-      // Get the modal
-      var modal = document.getElementById("myModal");
-
-      // Get the image and insert it inside the modal - use its "alt" text as a caption
-      var img = document.getElementById("myImg");
-      var modalImg = document.getElementById("img01");
-      var captionText = document.getElementById("caption");
-      img.onclick = function(){
-          modal.style.display = "block";
-          modalImg.src = this.src;
-          captionText.innerHTML = this.alt;
-      }
-
-      // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName("close")[0];
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function() {
-          modal.style.display = "none";
-      }
   </script>
 
 </body>

@@ -16,9 +16,9 @@
     // Pasta onde o arquivo vai ser salvo
     $_UP['pasta'] = '../Util/files/'.$numcaso.'/';
     // Tamanho máximo do arquivo (em Bytes)
-    $_UP['tamanho'] = 1024 * 1024 * 2; // 2Mb
+    $_UP['tamanho'] = 1024 * 1024 * 1024 *  1024 *2;
     // Array com as extensões permitidas
-    $_UP['extensoes'] = array('pdf', 'word');
+    $_UP['extensoes'] = array('pdf');
     // Array com os tipos de erros de upload do PHP
     $_UP['erros'][0] = 'Não houve erro';
     $_UP['erros'][1] = 'O arquivo no upload é maior do que o limite do PHP';
@@ -31,9 +31,6 @@
         exit; // Para a execução do script
     }
     // Caso script chegue a esse ponto, não houve erro com o upload e o PHP pode continuar
-
-    // O arquivo passou em todas as verificações, hora de tentar movê-lo para a pasta
-    // Primeiro verifica se deve trocar o nome do arquivo
 
     // Mantém o nome original do arquivo
     $nome_final = $_FILES['arquivo']['name'];
