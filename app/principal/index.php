@@ -67,37 +67,48 @@
   <div id="wrapper">
 
     <!-- Sidebar -->
-    <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="index.php">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Painel de Controle</span>
-        </a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Páginas</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <!-- <h6 class="dropdown-header">Other Pages:</h6> -->
-          <a class="dropdown-item" href="mensagens.html">Mensagens</a>
-          <a class="dropdown-item" href="calendario.php">Calendário</a>
-          <a class="dropdown-item" href="casos_juridicos.php">Casos Jurídicos</a>
-          <a class="dropdown-item" href="anotacoes.html">Anotações</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Gráficos</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="tabelas.html">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tabelas</span></a>
-      </li>
-    </ul>
+      <ul class="sidebar navbar-nav">
+          <li class="nav-item active">
+              <a class="nav-link" href="index.php">
+                  <i class="fas fa-fw fa-tachometer-alt"></i>
+                  <span>Painel de Controle</span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="mensagens.html">
+                  <i class="fas fa-fw fa-envelope"></i>
+                  <span>Mensagens</span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="calendario.php">
+                  <i class="fas fa-fw fa-calendar"></i>
+                  <span>Agenda</span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="casos_juridicos.php">
+                  <i class="fas fa-fw fa-th-list"></i>
+                  <span>Casos Jurídicos</span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="anotacoes.html">
+                  <i class="fas fa-fw fa-pencil-alt"></i>
+                  <span>Anotações</span>
+              </a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="charts.html">
+                  <i class="fas fa-fw fa-chart-area"></i>
+                  <span>Gráficos</span></a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href="tabelas.html">
+                  <i class="fas fa-fw fa-table"></i>
+                  <span>Tabelas</span></a>
+          </li>
+      </ul>
 
     <div id="content-wrapper">
 
@@ -117,7 +128,7 @@
             <div class="card text-white bg-primary o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <i class="fas fa-fw fa-comments"></i>
+                  <i class="fas fa-fw fa-envelope"></i>
                 </div>
                 <div class="mr-5">Mensagens!</div>
               </div>
@@ -133,9 +144,9 @@
             <div class="card text-white bg-warning o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <i class="fas fa-fw fa-list"></i>
+                  <i class="fas fa-fw fa-calendar"></i>
                 </div>
-                <div class="mr-5">Calendário!</div>
+                <div class="mr-5">Agenda!</div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="calendario.php">
                 <span class="float-left">Ver mais</span>
@@ -149,7 +160,7 @@
             <div class="card text-white bg-success o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <i class="fas fa-fw fa-shopping-cart"></i>
+                  <i class="fas fa-fw fa-th-list"></i>
                 </div>
                 <div class="mr-5">Casos Jurídicos!</div>
               </div>
@@ -165,7 +176,7 @@
             <div class="card text-white bg-dark o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <i class="fas fa-fw fa-life-ring"></i>
+                  <i class="fas fa-fw fa-pencil-alt"></i>
                 </div>
                 <div class="mr-5">Anotações!</div>
               </div>

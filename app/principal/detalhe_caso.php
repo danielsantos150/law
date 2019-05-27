@@ -121,6 +121,13 @@
         /* TODO realizar operação com o cadastro de movimentação do caso jurídico (cadastrar tarefa na agenda e adicionar notificação) */
     }
 
+    $result_verifica = $model->verificado_caso_esta_arquivado($_GET["caso"], "10701027681", $con);
+    if(mysqli_num_rows($result_verifica) == 0){
+        $caso_arquivado = TRUE;
+    }else{
+        $caso_arquivado = FALSE;
+    }
+
 
 
 ?>
@@ -197,25 +204,36 @@
   <div id="wrapper">
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item active">
-        <a class="nav-link" href="index.php">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Painel de Controle</span>
-        </a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-fw fa-folder"></i>
-          <span>Páginas</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <!-- <h6 class="dropdown-header">Other Pages:</h6> -->
-          <a class="dropdown-item" href="mensagens.html">Mensagens</a>
-          <a class="dropdown-item" href="calendario.php">Calendário</a>
-          <a class="dropdown-item" href="casos_juridicos.php">Casos Jurídicos</a>
-          <a class="dropdown-item" href="anotacoes.html">Anotações</a>
-        </div>
-      </li>
+        <li class="nav-item">
+            <a class="nav-link" href="index.php">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Painel de Controle</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="mensagens.html">
+                <i class="fas fa-fw fa-envelope"></i>
+                <span>Mensagens</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="calendario.php">
+                <i class="fas fa-fw fa-calendar"></i>
+                <span>Agenda</span>
+            </a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="casos_juridicos.php">
+                <i class="fas fa-fw fa-newspaper"></i>
+                <span>Casos Jurídicos</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="anotacoes.html">
+                <i class="fas fa-fw fa-pencil-ruler"></i>
+                <span>Anotações</span>
+            </a>
+        </li>
       <li class="nav-item">
         <a class="nav-link" href="charts.html">
           <i class="fas fa-fw fa-chart-area"></i>
@@ -227,7 +245,6 @@
           <span>Tabelas</span></a>
       </li>
     </ul>
-
         <div id="content-wrapper">
             <div class="container-fluid">
                 <!-- Breadcrumbs-->
@@ -357,9 +374,13 @@
                 </div>
                 <div class="card" style="margin-top: 5px;">
                     <div class="card-header h6">Movimentações
-                        <button class="btn btn-success" style="position: relative; float: right;" data-toggle="modal" data-target="#modalCadastraMovimentacao">
-                            <span class="fa fa-arrow-alt-circle-right"></span>
-                        </button>
+                        <?php
+                            if($caso_arquivado){
+                                echo '<button class="btn btn-success" style="position: relative; float: right;" data-toggle="modal" data-target="#modalCadastraMovimentacao">
+                                        <span class="fa fa-arrow-alt-circle-right"></span>
+                                    </button>';
+                            }
+                        ?>
                     </div>
                     <div class="card-body">
                         <div class="row">
@@ -430,7 +451,6 @@
   </div>
 
   <!-- Model nova ocorrencia -->
-
   <div class="modal fade" id="cadastroOcorrencia" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
@@ -462,7 +482,6 @@
 
 
   <!-- Modal novo arquivo -->
-
   <div class="modal fade bd-example-modal-md" id="cadastroArquivos" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-md" role="document">
           <div class="modal-content">
