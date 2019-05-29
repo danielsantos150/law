@@ -197,7 +197,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="mensagens.html">
+              <a class="nav-link" href="mensagens.php">
                   <i class="fas fa-fw fa-envelope"></i>
                   <span>Mensagens</span>
               </a>

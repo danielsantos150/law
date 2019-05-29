@@ -1,3 +1,17 @@
+<?php
+
+    include_once "../connections/conections.php";
+    include_once "../connections/model.php";
+
+    $model = new Model;
+    $result_advogados = $model->busca_advogados_cadastrados($con);
+
+    if(isset($_GET["mensagem"])){
+        var_dump($_POST);exit;
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -75,7 +89,7 @@
         </a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="mensagens.html">
+        <a class="nav-link" href="mensagens.php">
           <i class="fas fa-fw fa-envelope"></i>
           <span>Mensagens</span>
         </a>
@@ -123,9 +137,29 @@
           </ol>
 
           <!-- Page Content -->
-          <h1>Tela Mensagens</h1>
-          <hr>
-          <p>Ainda é necessário criar.</p>
+            <div class="card" style="margin-top: 5px;">
+                <div class="card-header h6">Mensagens
+                    <button class="btn btn-success" style="position: relative; float: right;" data-toggle="modal" data-target="#cadastroMensagens">
+                        <span class="fa fa-plus"></span>
+                    </button>
+                </div>
+                <div class="card card-body">
+                    <div class="row">
+
+                    </div>
+                </div>
+                <div class="card card-footer">
+                    <div class="row">
+                        <div class="col-md-4" style="background-color: #8fdf82;border-radius: 10px;margin-right: 3px;">
+                            <div style="color: white; text-align: center;">* Mensagens de cunho pessoal</div>
+                        </div>
+                        <div class="col-md-5" style="background-color: green; border-radius: 10px;">
+                            <div style="color: white; text-align: center;">** Mensagens de cunho profissional (coworking)</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
 
         </div>
         <!-- /.container-fluid -->
@@ -161,6 +195,56 @@
       </div>
     </div>
   </div>
+
+  <!-- Mensagens Modal -->
+  <div class="modal fade" id="cadastroMensagens" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Nova Mensagem</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form role="form" id="form-cadastro" action="?mensagem=true" method="POST">
+                      <div class="form-group">
+                          <div class="form-group">
+                              <label for="advogadosSistema">Advogados</label>
+                              <select class="form-control" id="advogadosSistema" name="advogadosSistema">
+                                  <?php
+                                  while ($lista_advogados = mysqli_fetch_array($result_advogados)){
+                                      echo "<option id='advogado_nome' value='".$lista_advogados['cpf']."'>".$lista_advogados['nome_completo']."</option>";
+                                  }
+                                  ?>
+                              </select>
+                          </div>
+
+                          <label for="tipoContato">Tipo de Contato:</label>
+                          <div class="form-group">
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="tipoContato" id="contatoCoworking" value="green">
+                                  <label class="form-check-label" for="inlineRadio1">Coworking</label>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                  <input class="form-check-input" type="radio" name="tipoContato" id="contatoPessoal" value="#8fdf82">
+                                  <label class="form-check-label" for="inlineRadio2">Pessoal</label>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="mensagem">Mensagem</label>
+                          <textarea type="text" class="form-control" id="descricaoMensagem" name="descricaoMensagem"></textarea>
+                      </div>
+                      <div class="form-group">
+                          <button type="submit" class="btn btn-success">Cadastrar</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
 
   <!-- Bootstrap core JavaScript-->
   <script src="../Util/principal/vendor/jquery/jquery.min.js"></script>

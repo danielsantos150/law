@@ -75,7 +75,7 @@
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="mensagens.html">
+              <a class="nav-link" href="mensagens.php">
                   <i class="fas fa-fw fa-envelope"></i>
                   <span>Mensagens</span>
               </a>
@@ -132,7 +132,7 @@
                 </div>
                 <div class="mr-5">Mensagens!</div>
               </div>
-              <a class="card-footer text-white clearfix small z-1" href="mensagens.html">
+              <a class="card-footer text-white clearfix small z-1" href="mensagens.php">
                 <span class="float-left">Ver mais</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>

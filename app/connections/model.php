@@ -356,5 +356,22 @@ class Model
 
     }
 
+    function busca_advogados_cadastrados($con){
+
+        try{
+
+            $query = "SELECT cpf, nome_completo
+                        FROM law.usuario";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
+
+    }
+
 
 }
