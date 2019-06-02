@@ -373,5 +373,41 @@ class Model
 
     }
 
+    function cadastra_nova_mensagem($advogado, $mensagem, $origem, $tipo_contato, $con){
+
+        try{
+
+            $query = "INSERT INTO law.mensagem (cpf_advogado, data, mensagem, tipo_contato, advogado_destino)
+                      VALUES ('$origem', now(), '$mensagem', '$tipo_contato', '$advogado' );";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
+
+    }
+
+    function busca_mensagens($origem, $con){
+
+        try{
+
+            $query = "SELECT DATE_FORMAT(m.data, '%d/%m/%Y %H:%i:%s') as data, m.mensagem, m.tipo_contato, m.advogado_destino, u.nome_completo
+                        FROM law.mensagem m
+                        inner join usuario u on u.cpf = m.advogado_destino
+                        where m.cpf_advogado = '$origem'";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
+
+    }
+
 
 }

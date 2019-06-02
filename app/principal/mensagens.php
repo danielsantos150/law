@@ -7,8 +7,18 @@
     $result_advogados = $model->busca_advogados_cadastrados($con);
 
     if(isset($_GET["mensagem"])){
-        var_dump($_POST);exit;
+
+        $mensagem = $_POST["descricaoMensagem"];
+        $origem = "10701027681";
+        $destino = $_POST["advogadosSistema"];
+        $tipo_contato = $_POST["tipoContato"];
+
+        $result_mensagem = $model->cadastra_nova_mensagem($destino, $mensagem, $origem, $tipo_contato, $con);
+
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=mensagens.php?'>";
     }
+
+    $result_mensagens_enviadas = $model->busca_mensagens("10701027681", $con);
 
 ?>
 
@@ -144,9 +154,21 @@
                     </button>
                 </div>
                 <div class="card card-body">
-                    <div class="row">
-
-                    </div>
+                        <?php
+                        while ($lista_mensagens = mysqli_fetch_array($result_mensagens_enviadas)){
+                            echo '<div class="card">
+                                  <div class="card-header" style="color: white; background-color: '.$lista_mensagens["tipo_contato"].'; ">
+                                    Destinatário: '.$lista_mensagens["nome_completo"].'
+                                  </div>
+                                  <div class="card-body">
+                                    <blockquote class="blockquote mb-0">
+                                      <p>'.$lista_mensagens["mensagem"].'</p>
+                                      <footer class="blockquote-footer">Enviada em <cite title="Source Title">'.$lista_mensagens["data"].'</cite></footer>
+                                    </blockquote>
+                                  </div>
+                                </div>';
+                        }
+                        ?>
                 </div>
                 <div class="card card-footer">
                     <div class="row">
