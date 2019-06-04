@@ -93,9 +93,9 @@
               </a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="anotacoes.html">
+              <a class="nav-link" href="advogados.php">
                   <i class="fas fa-fw fa-pencil-alt"></i>
-                  <span>Anotações</span>
+                  <span>Advogados</span>
               </a>
           </li>
           <li class="nav-item">
@@ -178,9 +178,9 @@
                 <div class="card-body-icon">
                   <i class="fas fa-fw fa-pencil-alt"></i>
                 </div>
-                <div class="mr-5">Anotações!</div>
+                <div class="mr-5">Advogados!</div>
               </div>
-              <a class="card-footer text-white clearfix small z-1" href="anotacoes.html">
+              <a class="card-footer text-white clearfix small z-1" href="advogados.php">
                 <span class="float-left">Ver mais</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>

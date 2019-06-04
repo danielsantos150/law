@@ -1,3 +1,13 @@
+<?php
+
+    include_once "../connections/conections.php";
+    include_once "../connections/model.php";
+
+    $model = new Model;
+
+    $result_advogados = $model->busca_advogados_cadastrados($con);
+
+?>
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -93,9 +103,9 @@
         </a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href="anotacoes.html">
+        <a class="nav-link" href="advogados.php">
           <i class="fas fa-fw fa-pencil-alt"></i>
-          <span>Anotações</span>
+          <span>Advogados</span>
         </a>
       </li>
       <li class="nav-item">
@@ -119,13 +129,44 @@
             <li class="breadcrumb-item">
               <a href="index.php">Painel de Controle</a>
             </li>
-            <li class="breadcrumb-item active">Anotações</li>
+            <li class="breadcrumb-item active">Advogados</li>
           </ol>
 
           <!-- Page Content -->
-          <h1>Tela Anotações</h1>
-          <hr>
-          <p>Ainda é necessário criar.</p>
+            <div class="card" style="margin-top: 5px;">
+                <div class="card-header h6">Advogados Cadastrados no Sistema
+                    <button class="btn btn-success" style="position: relative; float: right;" data-toggle="modal" data-target="#cadastroMensagens">
+                        <span class="fa fa-info"></span>
+                    </button>
+                </div>
+                <div class="card card-body">
+                    <div class="container">
+                        <div class="row">
+                            <?php
+                            $c = 0;
+                            while($advogados = mysqli_fetch_array($result_advogados)){
+                                if($advogados['sexo'] == 'M'){
+                                    echo '<div class="col-sm-2">
+                                        <img src="../Util/img/law-icon-male.jpg"/>';
+                                }else{
+                                    echo '<div class="col-sm-2">
+                                        <img src="../Util/img/law-icon-female.jpg"/>';
+                                }
+                                echo $advogados["nome_completo"];
+                                echo '<br>  Telefone: '.$advogados['telefone'].'</div>';
+                                $c = $c +1;
+                                if($c == 6){
+                                    echo '</div><div class="row">';
+                                    $c = 1;
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-footer">
+                </div>
+            </div>
 
         </div>
         <!-- /.container-fluid -->

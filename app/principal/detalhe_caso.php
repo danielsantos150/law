@@ -229,9 +229,9 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="anotacoes.html">
+            <a class="nav-link" href="advogados.php">
                 <i class="fas fa-fw fa-pencil-ruler"></i>
-                <span>Anotações</span>
+                <span>Advogados</span>
             </a>
         </li>
       <li class="nav-item">

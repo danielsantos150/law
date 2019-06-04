@@ -143,7 +143,7 @@
                 <a class="dropdown-item" href="mensagens.php">Mensagens</a>
                 <a class="dropdown-item" href="calendario.php">Calendário</a>
                 <a class="dropdown-item" href="casos_juridicos.php">Casos Jurídicos</a>
-                <a class="dropdown-item" href="anotacoes.html">Anotações</a>
+                <a class="dropdown-item" href="advogados.php">Advogados</a>
             </div>
         </li>
         <li class="nav-item">

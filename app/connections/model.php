@@ -360,7 +360,7 @@ class Model
 
         try{
 
-            $query = "SELECT cpf, nome_completo
+            $query = "SELECT cpf, nome_completo, email, telefone, celular, cidade, estado, cep, sexo
                         FROM law.usuario";
 
             $stmt = mysqli_query($con, $query);
@@ -408,6 +408,4 @@ class Model
         }
 
     }
-
-
 }
