@@ -146,10 +146,10 @@
                             $c = 0;
                             while($advogados = mysqli_fetch_array($result_advogados)){
                                 if($advogados['sexo'] == 'M'){
-                                    echo '<div class="col-sm-2" data-toggle="modal" data-target="#infoAdvogado">
+                                    echo '<div class="col-sm-2" data-toggle="modal" data-target="#infoAdvogado'.$advogados["cpf"].'">
                                         <img src="../Util/img/law-icon-male.jpg"/>';
                                 }else{
-                                    echo '<div class="col-sm-2"  data-toggle="modal" data-target="#infoAdvogado">
+                                    echo '<div class="col-sm-2"  data-toggle="modal" data-target="#infoAdvogado'.$advogados["cpf"].'">
                                         <img src="../Util/img/law-icon-female.jpg"/>';
                                 }
                                 echo $advogados["nome_completo"];
@@ -160,11 +160,11 @@
                                     $c = 1;
                                 }
 
-                                echo '<div class="modal fade" id="infoAdvogado" tabindex="-1" role="dialog" aria-labelledby="infoAdvogado" aria-hidden="true">
+                                echo '<div class="modal fade" id="infoAdvogado'.$advogados["cpf"].'" tabindex="-1" role="dialog" aria-labelledby="infoAdvogado" aria-hidden="true">
                                               <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                   <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Ocorrência nº.:</h5>
+                                                    <h5 class="modal-title" id="exampleModalLabel">'.$advogados['nome_completo'].'</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                       <span aria-hidden="true">&times;</span>
                                                     </button>
