@@ -408,4 +408,23 @@ class Model
         }
 
     }
+
+    function busca_ultimo_caso_juridico_por_cpf($cpfcnpj, $con){
+
+        try{
+
+            $query = "SELECT id_caso, titulo_processo, cpfcnpj_advogado, status, ultima_alteracao, nome_cliente, tipo_processo, autuacao, ramo_direito, relator, numero_caso, classe_judicial, orgao_julgador, polo_ativo, polo_passivo, cpfcnpj_poloAtivo, cpfcnpj_poloPassivo, position
+                        FROM law.casos_juridicos
+                        WHERE cpfcnpj_advogado = '$cpfcnpj'
+                        ORDER BY id_caso DESC;";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
+
+    }
 }

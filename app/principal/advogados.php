@@ -169,10 +169,14 @@
                                                       <span aria-hidden="true">&times;</span>
                                                     </button>
                                                   </div>
-                                                  <div class="modal-body">                                                    
+                                                  <div class="modal-body">
+                                                  <p>E-mail:  <a href="mailto:'.$advogados["email"].'">'.$advogados["email"].'</a></p> 
+                                                  <p>Telefone: '.$advogados['telefone'].'</p>
+                                                  <p>Estado/Cidade: '.$advogados['estado'].'/'.$advogados['cidade'].'</p>
+                                                  <p>Casos Jurídicos: <a href="detalhe_caso_visitante.php?cpf='.$advogados["cpf"].'">Visitar</a></p> 
+                                                  <p></p>                                                 
                                                   </div>
-                                                  <div class="modal-footer">
-                                                    <button type="button" class="btn btn-danger"><a style="color: white;" href="">Excluir</a></button>
+                                                  <div class="modal-footer">                                                    
                                                     <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
                                                   </div>
                                                 </div>
