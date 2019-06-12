@@ -10,22 +10,45 @@
 
 <head>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>E-LAW - Seu caso no seu controle</title>
+    <title>E-LAW - Seu caso no seu controle</title>
 
-  <!-- Custom fonts for this template-->
-  <link href="../Util/principal/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <!-- Custom fonts for this template-->
+    <link href="../Util/principal/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 
-  <!-- Page level plugin CSS-->
-  <link href="../Util/principal/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <!-- Page level plugin CSS-->
+    <link href="../Util/principal/vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
 
-  <!-- Custom styles for this template-->
-  <link href="../Util/principal/css/sb-admin.css" rel="stylesheet">
+    <!-- Custom styles for this template-->
+    <link href="../Util/principal/css/sb-admin.css" rel="stylesheet">
+
+    <style type="text/css">
+        #corteIframe {
+            position: absolute;
+            clip: rect(0px,1080px,750px,0px);
+             /* pode colocar o mesmo valor do segundo parâmetro */
+        }
+    </style>
+
+    <script>
+        function Mudarestado(el) {
+            var display = document.getElementById(el).style.display;
+            if(display == "none"){
+                document.getElementById(el).style.display = 'block';
+                document.getElementById('interno').style.display = 'none';
+                $('#framepje').attr('src', $('#framepje').attr('src'));
+            }else{
+                document.getElementById(el).style.display = 'none';
+                document.getElementById('interno').style.display = 'block';
+                $('#framepje').attr('src', $('#framepje').attr('src'));
+            }
+        }
+    </script>
 
 </head>
 
@@ -71,9 +94,9 @@
 
   </nav>
 
-  <div id="wrapper">
-    <!-- Sidebar -->
-      <ul class="sidebar navbar-nav">
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <ul class="sidebar navbar-nav">
           <li class="nav-item">
               <a class="nav-link" href="index.php">
                   <i class="fas fa-fw fa-tachometer-alt"></i>
@@ -116,36 +139,44 @@
           </li>
       </ul>
 
-      <div id="content-wrapper">
-        <div class="container-fluid">
-          <!-- Breadcrumbs-->
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="index.php">Painel de Controle</a>
-            </li>
-            <li class="breadcrumb-item active">Casos Jurídicos</li>
-          </ol>
+        <div id="content-wrapper">
+            <div class="container-fluid">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="index.php">Painel de Controle</a>
+                </li>
+                <li class="breadcrumb-item active">Casos Jurídicos</li>
+            </ol>
 
-          <!-- Page Content -->
-          <h1>Casos Jurídicos</h1>
-          <hr>
-          <p>Caro Advogado(a), nesta secção serão apresentados todos os casos jurídicos por você cadastrados na plataforma.</p>
-          <hr>
-          <!-- DataTables Example -->
-          <div class="card mb-3">
-            <div class="card-header">
-              <i class="fas fa-folder-open"></i>
-              Casos Jurídicos do <?php echo $nomeAdvogado; ?> </div>
-
-              <?php echo $listagem_casos; ?>
-
-          </div>
+            <!-- Page Content -->
+            <h1>Casos Jurídicos</h1>
+            <hr>
+            <p>Caro Advogado(a), nesta secção serão apresentados todos os casos jurídicos por você cadastrados na plataforma.</p>
+            <hr>
+            <!-- DataTables Example -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-folder-open"></i>
+                        Casos Jurídicos do <?php echo $nomeAdvogado; ?>
+                    <button class="btn btn-success" style="float: right; width: 250px;" onclick="Mudarestado('externo')"><i class="fa fa-external-link-alt" ></i>&nbsp;&nbsp;Abrir Consulta Externa</button>
+                </div>
+                <div id="interno">
+                    <?php echo $listagem_casos; ?>
+                </div>
+                <div id="externo" style="display:none; margin: 5px;">
+                    <p>Realize a pesquisa do caso jurídico pela nossa parceira o <b>PJe Consulta Pública</b>.</p>
+                    <div id="corteIframe" style="margin-top: 10px;">
+                        <iframe id='framepje' src="https://pje.tjmg.jus.br/pje/ConsultaPublica/listView.seam" style="width:1080px; height:600px; border: none; " scrolling="no"></iframe>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- /.container-fluid -->
 
 
 
-      </div>
+        </div>
       <!-- /.content-wrapper -->
   </div>
   <!-- /#wrapper -->
@@ -184,11 +215,7 @@
   <!-- Custom scripts for all pages-->
   <script src="../Util/principal/js/sb-admin.min.js"></script>
 
-  <script>
-      $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
-      })
-  </script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 </body>
 

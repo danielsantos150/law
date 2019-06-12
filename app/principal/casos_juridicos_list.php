@@ -24,7 +24,7 @@
                                 <th>Classe Judicial</th>
                                 <th>Última Atualização</th>
                                 <th>Mais Informações</th>
-                                <th>Visualizar Externamente</th>
+                                
                               </tr>
                               </thead> ';
 
@@ -38,7 +38,7 @@
                                 <td>'.$linha_caso["classe_judicial"].'</td>
                                 <td>'.$linha_caso["ultima_alteracao"].'</td>
                                 <td><button type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Entrar!" onclick="window.location.href=\'detalhe_caso.php?caso='.$linha_caso["id_caso"].'\'"><i class="fas fa-door-open"></i></button></td>
-                                <td><button type="button" class="btn btn-outline-success" onclick="window.location.href=\'detalhe_caso.php?caso='.$linha_caso["id_caso"].'\'"><i class="fas fa-we"></i></button></td>
+                                
                               </tr>
                               </tbody>
                             ';
