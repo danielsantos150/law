@@ -373,12 +373,12 @@ class Model
 
     }
 
-    function cadastra_nova_mensagem($advogado, $mensagem, $origem, $tipo_contato, $con){
+    function cadastra_nova_mensagem($origem, $mensagem, $destino, $con){
 
         try{
 
-            $query = "INSERT INTO law.mensagem (cpf_advogado, data, mensagem, tipo_contato, advogado_destino)
-                      VALUES ('$origem', now(), '$mensagem', '$tipo_contato', '$advogado' );";
+            $query = "INSERT INTO law.mensagem (cpf_advogado, data, mensagem, advogado_destino)
+                      VALUES ('$origem', now(), '$mensagem', '$destino' );";
 
             $stmt = mysqli_query($con, $query);
 
@@ -394,7 +394,7 @@ class Model
 
         try{
 
-            $query = "SELECT DATE_FORMAT(m.data, '%d/%m/%Y %H:%i:%s') as data, m.mensagem, m.tipo_contato, m.advogado_destino, u.nome_completo
+            $query = "SELECT DATE_FORMAT(m.data, '%d/%m/%Y %H:%i:%s') as data, m.mensagem, m.advogado_destino, u.nome_completo
                         FROM law.mensagem m
                         inner join usuario u on u.cpf = m.advogado_destino
                         where m.cpf_advogado = '$origem'";
@@ -426,5 +426,22 @@ class Model
             return $exception;exit;
         }
 
+    }
+
+    function busca_Advogado_porEmail($email, $con){
+
+        try{
+
+            $query = "SELECT cpf, nome_completo, email
+                        FROM law.usuario
+                        WHERE email = '$email'";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
     }
 }

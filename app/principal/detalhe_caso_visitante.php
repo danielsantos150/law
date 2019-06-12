@@ -86,13 +86,13 @@
     $result_movimentacoes = $model->busca_movimentacoes_caso($idcaso, "10701027681", $con);
 
     if(isset($_GET["mensagem"])){
-        $advogado = $_POST["advisitado"];
+        $destino = $_POST["advisitado"];
         $mensagem = $_POST["descricaomensagem"];
-        $origem = "54490570678";
+        $origem = "10701027681";
 
-        $result_mensagem = $model->cadastra_nova_mensagem($advogado, $mensagem, $origem, NULL, $con);
+        $result_mensagem = $model->cadastra_nova_mensagem($origem, $mensagem, $destino, NULL, $con);
 
-        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=detalhe_caso_visitante.php?cpf=".$advogado."'>";
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=detalhe_caso_visitante.php?cpf=".$destino."'>";
     }
 
 ?>
