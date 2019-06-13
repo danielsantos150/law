@@ -22,7 +22,6 @@
                                 <th>Nome Cliente</th>
                                 <th>Assunto</th>
                                 <th>Classe Judicial</th>
-                                <th>Última Atualização</th>
                                 <th>Mais Informações</th>
                                 
                               </tr>
@@ -36,7 +35,6 @@
                                 <td>'.$linha_caso["nome_cliente"].'</td>
                                 <td>'.$linha_caso["titulo_processo"].'</td>
                                 <td>'.$linha_caso["classe_judicial"].'</td>
-                                <td>'.$linha_caso["ultima_alteracao"].'</td>
                                 <td><button type="button" class="btn btn-outline-success" data-toggle="tooltip" data-placement="top" title="Entrar!" onclick="window.location.href=\'detalhe_caso.php?caso='.$linha_caso["id_caso"].'\'"><i class="fas fa-door-open"></i></button></td>
                                 
                               </tr>

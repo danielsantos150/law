@@ -159,7 +159,7 @@
                 <div class="card-header">
                     <i class="fas fa-folder-open"></i>
                         Casos Jurídicos do <?php echo $nomeAdvogado; ?>
-                    <button class="btn btn-success" style="float: right; width: 250px;" onclick="Mudarestado('externo')"><i class="fa fa-external-link-alt" ></i>&nbsp;&nbsp;Abrir Consulta Externa</button>
+                    <button class="btn btn-success" style="float: right; width: 150px;" onclick="Mudarestado('externo')"><i class="fa fa-external-link-alt" ></i>&nbsp;&nbsp;Ver no PJe</button>
                 </div>
                 <div id="interno">
                     <?php echo $listagem_casos; ?>

@@ -23,7 +23,6 @@
         $result_mensagem = $model->cadastra_nova_mensagem($meu_cpf, $mensagem, $cpf_advogado_retornado_email, $con);
 
 
-
         $email = encaminhaEmail($destino, $mensagem, $email_origem, $senha_email_origem, "Contato eLAW - Portal do Advogado Online");
 
         echo "<meta HTTP-EQUIV='refresh' CONTENT='0;URL=mensagens.php'>";
@@ -31,7 +30,27 @@
 
     $result_mensagens_enviadas = $model->busca_mensagens($meu_cpf, $con);
 
+    $result_clientes = $model->busca_casos_juridicos($meu_cpf, $con);
 
+    if(isset($_GET["notifica"])){
+
+        $aNotificaCliente = explode(';', $_POST["clientesAdvogado"]);
+        $email_cliente = $aNotificaCliente[0];
+        $numero_caso = $aNotificaCliente[1];
+        $id_caso = $aNotificaCliente[2];
+        $mensagem = utf8_decode("O seu caso jurídico de número: ".$numero_caso.", recebeu uma atualização por parte do Advogado com a seguinte mensagem:
+         ".$_POST["descricaoNotificacao"]);
+
+        $mes_vigencia = intval($_POST["mesFeedback"]);
+        $data = date('Y-m-d');
+
+        $result_new_feedback = $model->cadastra_novo_feedback($meu_cpf, $email_cliente, $data, $id_caso, $mes_vigencia, $con);
+
+        
+        $email = encaminhaEmail($email_cliente, $mensagem, $email_origem, $senha_email_origem, "Contato eLAW - Portal do Advogado Online");
+
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='0;URL=mensagens.php'>";
+    }
 
 ?>
 
@@ -167,6 +186,9 @@
                     </button>
                 </div>
                 <div class="card card-body">
+                    <div style="margin-bottom: 5px;">
+                        <button class="btn btn-outline-success" style="float: right;" data-toggle="modal" data-target="#notificaCliente"><i class="fa fa-envelope-open-text" ></i>&nbsp;&nbsp;Notificar Cliente</button>
+                    </div>
                         <?php
                         while ($lista_mensagens = mysqli_fetch_array($result_mensagens_enviadas)){
                             echo '<div class="card">
@@ -256,6 +278,53 @@
                       <div class="form-group">
                           <label for="mensagem">Mensagem</label>
                           <textarea type="text" class="form-control" id="descricaoMensagem" name="descricaoMensagem"></textarea>
+                      </div>
+                      <div class="form-group">
+                          <button type="submit" class="btn btn-success">Cadastrar</button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Modal Notifica Clientes -->
+  <div class="modal fade" id="notificaCliente" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">Nova Notificação</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body">
+                  <form role="form" id="form-cadastro" action="?notifica=true" method="POST">
+                      <div class="form-group">
+                          <label for="clientesAdvogado">Clientes</label>
+                          <select class="form-control" id="clientesAdvogado" name="clientesAdvogado">
+                              <?php
+                              while ($lista_clientes = mysqli_fetch_array($result_clientes)){
+                                  echo "<option id='cliente_email' value='".$lista_clientes['email_cliente'].";".$lista_clientes['numero_caso'].";".$lista_clientes['id_caso']."'>".$lista_clientes['nome_cliente']."</option>";
+                              }
+                              ?>
+                          </select>
+                      </div>
+                      <div class="form-group">
+                          <label for="mesFeedback">Mês</label>
+                          <select class="form-control" id="mesFeedback" name="mesFeedback">
+                              <?php
+                              $c = 1;
+                              while ($c <= 12){
+                                  echo "<option id='mes' value='".$c."'>".$c."</option>";
+                                  $c = $c+1;
+                              }
+                              ?>
+                          </select>
+                      </div>
+                      <div class="form-group">
+                          <label for="mensagem">Descrição</label>
+                          <textarea type="text" class="form-control" id="descricaoNotificacao" name="descricaoNotificacao"></textarea>
                       </div>
                       <div class="form-group">
                           <button type="submit" class="btn btn-success">Cadastrar</button>

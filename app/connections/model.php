@@ -199,9 +199,10 @@ class Model
 
         try{
 
-            $query = "SELECT id_caso, numero_caso, nome_cliente, titulo_processo, classe_judicial, ultima_alteracao, duracao_processo
+            $query = "SELECT id_caso, numero_caso, nome_cliente, titulo_processo, classe_judicial, ultima_alteracao, duracao_processo, email_cliente
                         FROM law.casos_juridicos
-                        WHERE cpfcnpj_advogado = '$cpfcnpj';";
+                        WHERE cpfcnpj_advogado = '$cpfcnpj'
+                        and status = 1;";
 
             $stmt = mysqli_query($con, $query);
 
@@ -473,6 +474,80 @@ class Model
                     WHERE caso_juridico = '$idcaso'
                     AND cpf_advogado_origem = '$advogado_origem'
                     GROUP BY mes_vigencia;";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
+
+    }
+
+    function cadastra_novo_feedback ($meu_cpf, $email_cliente, $data, $id_caso, $mes_vigencia, $con){
+
+        try{
+
+            $query = "INSERT INTO feedback_cliente (cpf_advogado_origem, email_cliente, data_contato, caso_juridico, mes_vigencia) 
+                      VALUES ('$meu_cpf', '$email_cliente', '$data', $id_caso, $mes_vigencia);";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
+
+    }
+
+    function verifica_qtd_solucionados_abertos ($cpf_advogado, $con){
+
+        try{
+
+            $query = "SELECT status, count(status) as qtd
+                        FROM casos_juridicos
+                        WHERE cpfcnpj_advogado = '$cpf_advogado'
+                        GROUP BY status;";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
+
+    }
+
+    function verifica_qtd_casos_classe_judicial ($cpf_advogado, $con){
+
+        try{
+
+            $query = "SELECT classe_judicial, count(classe_judicial) as qtd
+                        FROM casos_juridicos
+                        WHERE cpfcnpj_advogado = '$cpf_advogado'
+                        GROUP BY classe_judicial;";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
+
+    }
+
+    function verifica_qtd_casos_ramo_direito ($cpf_advogado, $con){
+
+        try{
+
+            $query = "SELECT ramo_direito, count(ramo_direito) as qtd
+                        FROM casos_juridicos
+                        WHERE cpfcnpj_advogado = '$cpf_advogado'
+                        GROUP BY ramo_direito;";
 
             $stmt = mysqli_query($con, $query);
 
