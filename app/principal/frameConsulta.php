@@ -1,10 +1,19 @@
-<!DOCTYPE html>
+
+
 <html>
 <head>
-    <title>my I frame is as tall as your page</title>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <style type="text/css">
+        #corteIframe {
+            position: absolute;
+            clip: rect(0px,1000px,750px,0px);
+            width: 800px; /* pode colocar o mesmo valor do segundo parâmetro */
+        }
+    </style>
 </head>
-<body onresize="$('#iframe1').attr('height', $(window).height());" style="margin:0;" >
-<iframe id="iframe1" src="https://pje.tjmg.jus.br/pje/ConsultaPublica/listView.seam" style="width:100%;"  onload="this.height=$(window).height();"></iframe>
+<body>
+<div id="corteIframe">
+    <iframe src="https://pje.tjmg.jus.br/pje/ConsultaPublica/listView.seam" style="width:1000px; height:635px; border: none; " scrolling="no"></iframe>
+</div>
+
 </body>
 </html>

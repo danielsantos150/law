@@ -199,7 +199,7 @@ class Model
 
         try{
 
-            $query = "SELECT id_caso, numero_caso, nome_cliente, titulo_processo, classe_judicial, ultima_alteracao
+            $query = "SELECT id_caso, numero_caso, nome_cliente, titulo_processo, classe_judicial, ultima_alteracao, duracao_processo
                         FROM law.casos_juridicos
                         WHERE cpfcnpj_advogado = '$cpfcnpj';";
 
@@ -443,5 +443,44 @@ class Model
         }catch (Exception $exception){
             return $exception;exit;
         }
+    }
+
+    function busca_feedback_caso($idcaso, $con, $advogado_origem){
+
+        try{
+
+            $query = "SELECT cpf_advogado_origem, email_cliente, data_contato, caso_juridico, mes_vigencia
+                    FROM feedback_cliente
+                    WHERE caso_juridico = '$idcaso'
+                    AND cpf_advogado_origem = '$advogado_origem';";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
+
+    }
+
+    function busca_qtd_feedback_caso($idcaso, $con, $advogado_origem){
+
+        try{
+
+            $query = "SELECT mes_vigencia, count(id_feedback) as 'qtd'
+                    FROM feedback_cliente
+                    WHERE caso_juridico = '$idcaso'
+                    AND cpf_advogado_origem = '$advogado_origem'
+                    GROUP BY mes_vigencia;";
+
+            $stmt = mysqli_query($con, $query);
+
+            return $stmt;
+
+        }catch (Exception $exception){
+            return $exception;exit;
+        }
+
     }
 }

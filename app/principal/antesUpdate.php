@@ -99,7 +99,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="charts.php">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Gráficos</span></a>
       </li>
@@ -126,7 +126,7 @@
         <div class="card mb-3">
           <div class="card-header">
             <i class="fas fa-chart-area"></i>
-            Area Chart Example</div>
+            Feedbacks ao Cliente</div>
           <div class="card-body">
             <canvas id="myAreaChart" width="100%" height="30"></canvas>
           </div>
@@ -138,7 +138,7 @@
             <div class="card mb-3">
               <div class="card-header">
                 <i class="fas fa-chart-bar"></i>
-                Bar Chart Example</div>
+                  Bar Chart Example</div>
               <div class="card-body">
                 <canvas id="myBarChart" width="100%" height="50"></canvas>
               </div>

@@ -3,11 +3,57 @@
     include_once "../connections/conections.php";
     include_once "../connections/model.php";
 
-    $model = new Model;
+    $model = new Model();
 
-    $result_advogados = $model->busca_advogados_cadastrados($con);
+    $result_casos_advogado = $model->busca_casos_juridicos("10701027681", $con);
 
+    $colunas = '';
+
+    while ($linha_processo = mysqli_fetch_array($result_casos_advogado)) {
+        $i = 1;
+        while($i <= intval($linha_processo["duracao_processo"])){
+
+            if($i == $linha_processo["duracao_processo"]){
+                $colunas  = $colunas.''.$i.'ª Mês';
+            }else{
+                $colunas = $colunas.''.$i.'ª Mês"';
+                $colunas .= ',"';
+            }
+            $i = $i+1;
+        }
+    }
+
+    $idcaso = 2;
+    $advogado_origem = "10701027681";
+
+    $result_dados_feedback = $model->busca_feedback_caso($idcaso, $con, $advogado_origem);
+
+    $result_qtd_feedback = $model->busca_qtd_feedback_caso($idcaso, $con, $advogado_origem);
+
+    //$aFeedbacks = mysqli_fetch_array($result_qtd_feedback);
+    $aFeedbacks = array();
+
+    while ($linha_qtd = mysqli_fetch_array($result_qtd_feedback)) {
+        $aFeedbacks[$linha_qtd['mes_vigencia']] = $linha_qtd['qtd'];
+    }
+
+    #var_dump($aFeedbacks);
+    $valores = "";
+
+    foreach ($aFeedbacks as $p){
+        $valores .= intval($p).',';
+    }
+
+    $valores = rtrim($valores, ',');
+
+    //var_dump($valores);exit;
+    /*
+        while ($linha_feedback = mysqli_fetch_array($result_dados_feedback)) {
+            var_dump($linha_feedback);exit;
+        }
+    */
 ?>
+
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -64,7 +110,7 @@
           <i class="fas fa-user-circle fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-          <a class="dropdown-item" href="perfil.php">Meu Perfil</a>
+          <a class="dropdown-item" href="perfil">Meu Perfil</a>
           <a class="dropdown-item" href="#">Preferências</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Sair</a>
@@ -84,7 +130,7 @@
           <span>Painel de Controle</span>
         </a>
       </li>
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="mensagens.php">
           <i class="fas fa-fw fa-envelope"></i>
           <span>Mensagens</span>
@@ -102,10 +148,10 @@
           <span>Casos Jurídicos</span>
         </a>
       </li>
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="advogados.php">
           <i class="fas fa-fw fa-pencil-alt"></i>
-          <span>Advogados</span>
+          <span>Advogadosç</span>
         </a>
       </li>
       <li class="nav-item">
@@ -120,86 +166,37 @@
       </li>
     </ul>
 
-      <div id="content-wrapper">
+    <div id="content-wrapper">
 
-        <div class="container-fluid">
+      <div class="container-fluid">
 
-          <!-- Breadcrumbs-->
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item">
-              <a href="index.php">Painel de Controle</a>
-            </li>
-            <li class="breadcrumb-item active">Advogados</li>
-          </ol>
+        <!-- Breadcrumbs-->
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="#">Painel de Controle</a>
+          </li>
+          <li class="breadcrumb-item active">Gráficos</li>
+        </ol>
 
-          <!-- Page Content -->
-            <div class="card" style="margin-top: 5px;">
-                <div class="card-header h6">Advogados Cadastrados no Sistema
-                    <button class="btn btn-success" style="position: relative; float: right;" data-toggle="modal" data-target="#cadastroMensagens">
-                        <span class="fa fa-info"></span>
-                    </button>
-                </div>
-                <div class="card card-body">
-                    <div class="container">
-                        <div class="row">
-                            <?php
-                            $c = 0;
-                            while($advogados = mysqli_fetch_array($result_advogados)){
-                                if($advogados['sexo'] == 'M'){
-                                    echo '<div class="col-sm-2" data-toggle="modal" data-target="#infoAdvogado'.$advogados["cpf"].'">
-                                        <img src="../Util/img/law-icon-male.jpg"/>';
-                                }else{
-                                    echo '<div class="col-sm-2"  data-toggle="modal" data-target="#infoAdvogado'.$advogados["cpf"].'">
-                                        <img src="../Util/img/law-icon-female.jpg"/>';
-                                }
-                                echo $advogados["nome_completo"];
-                                echo '<br>  Telefone: '.$advogados['telefone'].'</div>';
-                                $c = $c +1;
-                                if($c == 6){
-                                    echo '</div><div class="row">';
-                                    $c = 1;
-                                }
-
-                                echo '<div class="modal fade" id="infoAdvogado'.$advogados["cpf"].'" tabindex="-1" role="dialog" aria-labelledby="infoAdvogado" aria-hidden="true">
-                                              <div class="modal-dialog" role="document">
-                                                <div class="modal-content">
-                                                  <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">'.$advogados['nome_completo'].'</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                      <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                  </div>
-                                                  <div class="modal-body">
-                                                  <p>E-mail:  <a href="mailto:'.$advogados["email"].'">'.$advogados["email"].'</a></p> 
-                                                  <p>Telefone: '.$advogados['telefone'].'</p>
-                                                  <p>Estado/Cidade: '.$advogados['estado'].'/'.$advogados['cidade'].'</p>
-                                                  <p>Casos Jurídicos: <a href="detalhe_caso_visitante.php?cpf='.$advogados["cpf"].'">Visitar</a></p> 
-                                                  <p></p>                                                 
-                                                  </div>
-                                                  <div class="modal-footer">                                                    
-                                                    <button type="button" class="btn btn-primary" data-dismiss="modal">Fechar</button>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>';
-                            }
-                            ?>
-                        </div>
-                    </div>
-                </div>
-                <div class="card card-footer">
-                </div>
-            </div>
-
+        <!-- Area Chart Example-->
+        <div class="card mb-3">
+          <div class="card-header">
+            <i class="fas fa-chart-area"></i>
+            Feedbacks ao Cliente</div>
+          <div class="card-body">
+            <canvas id="myAreaChart" width="100%" height="30"></canvas>
+          </div>
         </div>
-        <!-- /.container-fluid -->
-
-
 
       </div>
-      <!-- /.content-wrapper -->
+      <!-- /.container-fluid -->
+
+
 
     </div>
+    <!-- /.content-wrapper -->
+
+  </div>
   <!-- /#wrapper -->
 
   <!-- Scroll to Top Button-->
@@ -233,8 +230,72 @@
   <!-- Core plugin JavaScript-->
   <script src="../Util/principal/vendor/jquery-easing/jquery.easing.min.js"></script>
 
+  <!-- Page level plugin JavaScript-->
+  <script src="../Util/principal/vendor/chart.js/Chart.min.js"></script>
+
   <!-- Custom scripts for all pages-->
   <script src="../Util/principal/js/sb-admin.min.js"></script>
+
+    <!-- Demo scripts for this page-->
+    <script>
+
+            Chart.defaults.global.defaultFontFamily = '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+            Chart.defaults.global.defaultFontColor = '#292b2c';
+
+            // Area Chart Example
+            var ctx = document.getElementById("myAreaChart");
+            var myLineChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["<?php echo $colunas; ?>"],
+                    datasets: [{
+                        label: "Interações",
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(2,117,216,0.2)",
+                        borderColor: "rgba(2,117,216,1)",
+                        pointRadius: 5,
+                        pointBackgroundColor: "rgba(2,117,216,1)",
+                        pointBorderColor: "rgba(255,255,255,0.8)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                        pointHitRadius: 50,
+                        pointBorderWidth: 2,
+                        data: [<?php echo $valores; ?>],
+                    }],
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            time: {
+                                unit: 'date'
+                            },
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                maxTicksLimit: 7
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                max: 15,
+                                maxTicksLimit: 5
+                            },
+                            gridLines: {
+                                color: "rgba(0, 0, 0, .125)",
+                            }
+                        }],
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            });
+
+    </script>
+    <script src="../Util/principal/js/demo/chart-bar-demo.js"></script>
+    <script src="../Util/principal/js/demo/chart-pie-demo.js"></script>
 
 </body>
 

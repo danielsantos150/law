@@ -2,23 +2,36 @@
 
     include_once "../connections/conections.php";
     include_once "../connections/model.php";
+    include_once "mail/enviaEmail.php";
 
     $model = new Model;
     $result_advogados = $model->busca_advogados_cadastrados($con);
 
+    $meu_cpf = "10701027681";
+
     if(isset($_GET["mensagem"])){
 
         $mensagem = $_POST["descricaoMensagem"];
-        $origem = "10701027681";
+
         $destino = $_POST["advogadosSistema"];
-        $tipo_contato = $_POST["tipoContato"];
 
-        $result_mensagem = $model->cadastra_nova_mensagem($destino, $mensagem, $origem, $tipo_contato, $con);
+        $result_busca_advogado_email = $model->busca_Advogado_porEmail($destino, $con);
 
-        echo "<meta HTTP-EQUIV='refresh' CONTENT='1;URL=mensagens.php?'>";
+        $resultado_query_email = mysqli_fetch_array($result_busca_advogado_email);
+        $cpf_advogado_retornado_email = $resultado_query_email["cpf"];
+
+        $result_mensagem = $model->cadastra_nova_mensagem($meu_cpf, $mensagem, $cpf_advogado_retornado_email, $con);
+
+
+
+        $email = encaminhaEmail($destino, $mensagem, $email_origem, $senha_email_origem, "Contato eLAW - Portal do Advogado Online");
+
+        echo "<meta HTTP-EQUIV='refresh' CONTENT='0;URL=mensagens.php'>";
     }
 
-    $result_mensagens_enviadas = $model->busca_mensagens("10701027681", $con);
+    $result_mensagens_enviadas = $model->busca_mensagens($meu_cpf, $con);
+
+
 
 ?>
 
@@ -123,7 +136,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="charts.html">
+        <a class="nav-link" href="charts.php">
           <i class="fas fa-fw fa-chart-area"></i>
           <span>Gráficos</span></a>
       </li>
@@ -157,7 +170,7 @@
                         <?php
                         while ($lista_mensagens = mysqli_fetch_array($result_mensagens_enviadas)){
                             echo '<div class="card">
-                                  <div class="card-header" style="color: white; background-color: '.$lista_mensagens["tipo_contato"].'; ">
+                                  <div class="card-header" style="color: white; background-color: #8a6d3b; ">
                                     Destinatário: '.$lista_mensagens["nome_completo"].'
                                   </div>
                                   <div class="card-body">
@@ -172,14 +185,10 @@
                 </div>
                 <div class="card card-footer">
                     <div class="row">
-                        <div class="col-md-4" style="background-color: #8fdf82;border-radius: 10px;margin-right: 3px;">
-                            <div style="color: white; text-align: center;">* Mensagens de cunho pessoal</div>
-                        </div>
-                        <div class="col-md-5" style="background-color: green; border-radius: 10px;">
-                            <div style="color: white; text-align: center;">** Mensagens de cunho profissional (coworking)</div>
+                        <div class="col-md-12" style="background-color: #c0a16b;border-radius: 10px;margin-right: 3px;">
+                            <div style="color: white; text-align: center;">* As mensagens enviadas foram, também, encaminhadas por e-mail.</div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
@@ -236,22 +245,12 @@
                               <select class="form-control" id="advogadosSistema" name="advogadosSistema">
                                   <?php
                                   while ($lista_advogados = mysqli_fetch_array($result_advogados)){
-                                      echo "<option id='advogado_nome' value='".$lista_advogados['cpf']."'>".$lista_advogados['nome_completo']."</option>";
+                                      if($lista_advogados['cpf'] != $meu_cpf){
+                                          echo "<option id='advogado_nome' value='".$lista_advogados['email']."'>".$lista_advogados['nome_completo']."</option>";
+                                      }
                                   }
                                   ?>
                               </select>
-                          </div>
-
-                          <label for="tipoContato">Tipo de Contato:</label>
-                          <div class="form-group">
-                              <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="tipoContato" id="contatoCoworking" value="green">
-                                  <label class="form-check-label" for="inlineRadio1">Coworking</label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                  <input class="form-check-input" type="radio" name="tipoContato" id="contatoPessoal" value="#8fdf82">
-                                  <label class="form-check-label" for="inlineRadio2">Pessoal</label>
-                              </div>
                           </div>
                       </div>
                       <div class="form-group">
